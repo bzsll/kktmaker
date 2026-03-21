@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💭 테마 제작 메이커 (iOS)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-height:100vh}
+.hdr{background:linear-gradient(90deg,#1c1900,#2a2600,#1c1900);border-bottom:1px solid #3a3600;padding:14px 20px;display:flex;align-items:center;position:sticky;top:0;z-index:100}
+.hdr-title{font-weight:800;font-size:18px;color:#FEE500;flex:1}
+.hdr-btn{background:#FEE500;color:#1a1600;border:none;border-radius:10px;padding:9px 16px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.main{display:grid;grid-template-columns:340px 1fr;height:calc(100vh - 60px)}
+.panel{background:#18181f;border-right:1px solid #2e2e3e;overflow-y:auto}
+.panel::-webkit-scrollbar{width:3px}
+.panel::-webkit-scrollbar-thumb{background:#2e2e3e}
+.sec{border-bottom:1px solid #2e2e3e}
+.sec-hd{padding:11px 15px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.sec-hd:hover{background:rgba(255,255,255,.02)}
+.sec-hd .t{font-size:12px;font-weight:700;color:#ddd;flex:1}
+.sec-hd .v{font-size:10px;color:#555;transition:transform .2s}
+.sec.open .sec-hd .v{transform:rotate(180deg)}
+.sec-body{display:none;padding:4px 15px 12px}
+.sec.open .sec-body{display:block}
+.row{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.row:last-child{border:none}
+.lbl{font-size:11px;color:#bbb;flex:1;line-height:1.35}
+.lbl small{display:block;color:#555;font-size:10px;margin-top:1px}
+.swatch{width:30px;height:30px;border-radius:8px;border:2px solid #2e2e3e;overflow:hidden;cursor:pointer;flex-shrink:0;position:relative}
+.swatch input[type=color]{position:absolute;top:-4px;left:-4px;width:calc(100% + 8px);height:calc(100% + 8px);border:none;cursor:pointer;padding:0}
+.mlbl{font-size:10px;color:#555;margin-top:8px;margin-bottom:2px;display:block}
+.minput{width:100%;background:#22222c;border:1.5px solid #2e2e3e;border-radius:8px;padding:7px 10px;color:#f0f0f0;font-family:inherit;font-size:12px;margin-bottom:5px}
+.minput:focus{outline:none;border-color:#FEE500}
+.minput::placeholder{color:#555}
+.irow{padding:5px 0 8px;border-bottom:1px solid rgba(255,255,255,.04)}
+.irow:last-child{border:none}
+.ilbl{font-size:11px;color:#bbb;margin-bottom:4px}
+.ilbl small{display:block;color:#555;font-size:10px;margin-top:1px}
+.upbtn{display:flex;align-items:center;gap:6px;background:#22222c;border:1.5px dashed #2e2e3e;border-radius:8px;padding:7px 10px;font-size:11px;color:#555;cursor:pointer;width:100%;font-family:inherit;transition:all .15s}
+.upbtn:hover{border-color:#FEE500;color:#FEE500}
+.upbtn.has{border-color:#00c897;color:#00c897}
+.upbtn input{display:none}
+.thumb{display:none;width:100%;height:40px;object-fit:cover;border-radius:6px;margin-top:4px;border:1px solid #2e2e3e}
+.thumb.show{display:block}
+.delbtn{display:none;background:none;border:none;color:#ff6b6b;font-size:10px;cursor:pointer;font-family:inherit;padding:2px 0}
+.delbtn.show{display:block}
+.preview{display:flex;flex-direction:column;align-items:center;padding:20px;gap:12px;overflow-y:auto;background:radial-gradient(ellipse at 40% 10%,#1e1c00,#0f0f14)}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.ptab{padding:5px 14px;border-radius:16px;border:1.5px solid #2e2e3e;background:none;color:#555;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer}
+.ptab.on{background:#FEE500;border-color:#FEE500;color:#1a1600}
+.phone{width:280px;background:#111;border-radius:38px;padding:11px;box-shadow:0 0 0 1.5px #333,0 30px 70px rgba(0,0,0,.8);position:relative;flex-shrink:0}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:80px;height:20px;background:#111;border-radius:0 0 12px 12px;z-index:10}
+.screen{border-radius:27px;overflow:hidden}
+.pscreen{display:none;flex-direction:column;height:560px}
+.pscreen.on{display:flex}
+.p-sbar{display:flex;justify-content:space-between;padding:24px 12px 3px;font-size:9px;font-weight:700;color:#fff}
+.p-chdr{display:flex;align-items:center;padding:5px 10px 8px;gap:7px;color:#fff}
+.p-chdr-back{font-size:14px}
+.p-chdr-title{flex:1;font-size:12px;font-weight:700}
+.p-chdr-icons{display:flex;gap:10px;font-size:14px}
+.p-chatbg{flex:1;position:relative;overflow:hidden}
+.p-chatbg-color{position:absolute;inset:0}
+.p-chatbg-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0}
+.p-chatbg-img.on{opacity:1}
+.p-msgs{position:relative;z-index:1;padding:8px 7px;display:flex;flex-direction:column;gap:6px;height:100%;overflow-y:auto}
+.p-date{align-self:center;font-size:9px;color:rgba(255,255,255,.9);background:rgba(0,0,0,.2);border-radius:8px;padding:2px 7px}
+.p-mrow{display:flex;gap:4px;align-items:flex-end}
+.p-mrow.me{justify-content:flex-end}
+.p-av{width:28px;height:28px;border-radius:8px;flex-shrink:0;align-self:flex-start;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;background:#ddd;position:relative}
+.p-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.p-av img.on{display:block}
+.p-mcol{max-width:60%}
+.p-mname{font-size:9px;color:#555;font-weight:600;margin-bottom:2px}
+.p-bwrap{display:flex;align-items:flex-end;gap:3px}
+.p-mrow.me .p-bwrap{flex-direction:row-reverse}
+.p-bbl{padding:5px 9px;border-radius:12px;font-size:10px;line-height:1.45;position:relative;overflow:hidden;min-width:30px;background:#fff}
+.p-bbl.me{border-bottom-right-radius:2px}
+.p-bbl.them{border-bottom-left-radius:2px}
+.p-bbl-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0}
+.p-bbl-bg.on{opacity:1}
+.p-bbl-txt{position:relative;z-index:1}
+.p-mtime{font-size:8px;color:rgba(255,255,255,.7);white-space:nowrap}
+.p-inbar{display:flex;align-items:center;gap:5px;padding:6px 8px;border-top:1px solid rgba(0,0,0,.07)}
+.p-inbox{flex:1;border-radius:15px;padding:5px 10px;font-size:10px;color:#999;border:1px solid #ddd;background:#fff}
+.p-inico{font-size:15px;color:#aaa}
+.p-tbar{display:flex;padding:4px 0 6px;border-top:1px solid #e5e5e5;position:relative;overflow:hidden;background:#fff}
+.p-tbar-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0}
+.p-tbar-bg.on{opacity:1}
+.p-titem{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:7px;position:relative;z-index:1}
+.p-titem svg{width:17px;height:17px}
+.p-titem .cico{position:absolute;top:0;width:17px;height:17px;object-fit:contain;display:none}
+.p-titem .cico.on{display:block}
+.p-titem svg.hide{opacity:0}
+.p-fhdr{padding:24px 12px 5px;display:flex;justify-content:space-between;align-items:center;background:#fff}
+.p-fhdr-t{font-size:16px;font-weight:800}
+.p-fhdr-icons{display:flex;gap:10px;font-size:16px}
+.p-myprof{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:4px solid #f0f0f0;background:#fff}
+.p-myav{width:40px;height:40px;border-radius:12px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px;background:#ddd;position:relative}
+.p-myav img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.p-myav img.on{display:block}
+.p-myname{font-size:12px;font-weight:700}
+.p-mystatus{font-size:10px;color:#aaa;margin-top:1px}
+.p-fsec{padding:6px 12px 2px;font-size:9px;color:#aaa;font-weight:600;background:#fff}
+.p-fitems{flex:1;background:#fff}
+.p-fitem{display:flex;align-items:center;padding:5px 12px;gap:8px}
+.p-fav{width:35px;height:35px;border-radius:10px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:17px;background:#ddd;position:relative}
+.p-fav img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.p-fav img.on{display:block}
+.p-fname{font-size:11px;font-weight:500}
+.p-fstatus{font-size:9px;color:#aaa}
+.p-fill{flex:1;background:#fff}
+.p-lock{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding-top:60px;gap:12px;flex:1;background:#1a1a2e}
+.p-lock-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0}
+.p-lock-bg.on{opacity:1}
+.p-lock-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:10px}
+.p-lock-time{font-size:34px;font-weight:900;color:#fff}
+.p-lock-date{font-size:11px;color:rgba(255,255,255,.7)}
+.p-lock-dots{display:flex;gap:10px}
+.p-lock-dot{width:18px;height:18px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
+.p-lock-dot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.p-lock-dot img.on{display:block}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);background:#1e1e1e;color:#fff;padding:8px 16px;border-radius:16px;font-size:12px;opacity:0;transition:all .25s;z-index:999;pointer-events:none;white-space:nowrap;border:1px solid #2e2e3e}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:700px){.main{grid-template-columns:1fr;height:auto}.panel{max-height:55vh}.preview{padding:14px}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-title">💭 테마 제작 메이커 (iOS)</div>
+  <button class="hdr-btn" onclick="generate()">💭 .ktheme 생성</button>
+</div>
+<div class="main">
+<div class="panel">
+
+  <!-- 테마 정보 -->
+  <div class="sec open" id="s0">
+    <div class="sec-hd" onclick="tog('s0')"><span class="t">테마 정보</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <span class="mlbl">테마 이름</span><input class="minput" id="m-name" value="MyTheme">
+      <span class="mlbl">테마 ID (고유값 · 영문+점)</span><input class="minput" id="m-id" value="com.myname.mytheme">
+      <span class="mlbl">제작자</span><input class="minput" id="m-author" placeholder="name">
+      <span class="mlbl">버전</span><input class="minput" id="m-ver" value="1.0">
+    </div>
+  </div>
+
+  <!-- 채팅방 -->
+  <div class="sec open" id="s1">
+    <div class="sec-hd" onclick="tog('s1')"><span class="t">채팅방</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <div class="row"><div class="lbl">헤더 / 보내기버튼 색상</div><div class="swatch"><input type="color" id="c-hdr" value="#EFBD16" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">채팅 배경색</div><div class="swatch"><input type="color" id="c-chatbg" value="#B2C7D9" oninput="render()"></div></div>
+      <div class="irow">
+        <div class="ilbl">채팅방 배경 이미지<small>chatroomBgImage</small></div>
+        <label class="upbtn" id="ub-chatbg">이미지 선택<input type="file" accept="image/*" onchange="up(this,'chatbg')"></label>
+        <img class="thumb" id="th-chatbg"><button class="delbtn" id="db-chatbg" onclick="del('chatbg')">✕ 제거</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 말풍선 -->
+  <div class="sec open" id="s2">
+    <div class="sec-hd" onclick="tog('s2')"><span class="t">말풍선</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <div class="row"><div class="lbl">내 말풍선 텍스트색</div><div class="swatch"><input type="color" id="c-me-txt" value="#1a1a1a" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">읽지않은 메세지 수 색상</div><div class="swatch"><input type="color" id="c-unread" value="#3c1e1e" oninput="render()"></div></div>
+      <div class="irow">
+        <div class="ilbl">내 말풍선 이미지 (기본)<small>chatroomBubbleSend01</small></div>
+        <label class="upbtn" id="ub-bbl-s1">이미지 선택<input type="file" accept="image/*" onchange="up(this,'bbl-s1')"></label>
+        <img class="thumb" id="th-bbl-s1"><button class="delbtn" id="db-bbl-s1" onclick="del('bbl-s1')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">내 말풍선 이미지 (선택됨)<small>chatroomBubbleSend01Selected</small></div>
+        <label class="upbtn" id="ub-bbl-s1sel">이미지 선택<input type="file" accept="image/*" onchange="up(this,'bbl-s1sel')"></label>
+        <img class="thumb" id="th-bbl-s1sel"><button class="delbtn" id="db-bbl-s1sel" onclick="del('bbl-s1sel')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">내 말풍선 이미지 (그룹)<small>chatroomBubbleSend02</small></div>
+        <label class="upbtn" id="ub-bbl-s2">이미지 선택<input type="file" accept="image/*" onchange="up(this,'bbl-s2')"></label>
+        <img class="thumb" id="th-bbl-s2"><button class="delbtn" id="db-bbl-s2" onclick="del('bbl-s2')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">내 말풍선 이미지 (그룹선택됨)<small>chatroomBubbleSend02Selected</small></div>
+        <label class="upbtn" id="ub-bbl-s2sel">이미지 선택<input type="file" accept="image/*" onchange="up(this,'bbl-s2sel')"></label>
+        <img class="thumb" id="th-bbl-s2sel"><button class="delbtn" id="db-bbl-s2sel" onclick="del('bbl-s2sel')">✕ 제거</button>
+      </div>
+      <div class="row" style="margin-top:6px"><div class="lbl">상대 말풍선 텍스트색</div><div class="swatch"><input type="color" id="c-them-txt" value="#1a1a1a" oninput="render()"></div></div>
+      <div class="irow">
+        <div class="ilbl">상대 말풍선 이미지 (기본)<small>chatroomBubbleReceive01</small></div>
+        <label class="upbtn" id="ub-bbl-r1">이미지 선택<input type="file" accept="image/*" onchange="up(this,'bbl-r1')"></label>
+        <img class="thumb" id="th-bbl-r1"><button class="delbtn" id="db-bbl-r1" onclick="del('bbl-r1')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">상대 말풍선 이미지 (선택됨)<small>chatroomBubbleReceive01Selected</small></div>
+        <label class="upbtn" id="ub-bbl-r1sel">이미지 선택<input type="file" accept="image/*" onchange="up(this,'bbl-r1sel')"></label>
+        <img class="thumb" id="th-bbl-r1sel"><button class="delbtn" id="db-bbl-r1sel" onclick="del('bbl-r1sel')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">상대 말풍선 이미지 (그룹)<small>chatroomBubbleReceive02</small></div>
+        <label class="upbtn" id="ub-bbl-r2">이미지 선택<input type="file" accept="image/*" onchange="up(this,'bbl-r2')"></label>
+        <img class="thumb" id="th-bbl-r2"><button class="delbtn" id="db-bbl-r2" onclick="del('bbl-r2')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">상대 말풍선 이미지 (그룹선택됨)<small>chatroomBubbleReceive02Selected</small></div>
+        <label class="upbtn" id="ub-bbl-r2sel">이미지 선택<input type="file" accept="image/*" onchange="up(this,'bbl-r2sel')"></label>
+        <img class="thumb" id="th-bbl-r2sel"><button class="delbtn" id="db-bbl-r2sel" onclick="del('bbl-r2sel')">✕ 제거</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 입력창 -->
+  <div class="sec" id="s3">
+    <div class="sec-hd" onclick="tog('s3')"><span class="t">입력창</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <div class="row"><div class="lbl">입력창 배경색</div><div class="swatch"><input type="color" id="c-inbar" value="#f5f5f5" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">메뉴 아이콘색</div><div class="swatch"><input type="color" id="c-tico" value="#aaaaaa" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">텍스트 색상</div><div class="swatch"><input type="color" id="c-intxt" value="#191919" oninput="render()"></div></div>
+    </div>
+  </div>
+
+  <!-- 탭바 -->
+  <div class="sec open" id="s4">
+    <div class="sec-hd" onclick="tog('s4')"><span class="t">하단 탭바</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <div class="row"><div class="lbl">탭바 배경색</div><div class="swatch"><input type="color" id="c-tbar" value="#ffffff" oninput="render()"></div></div>
+      <div class="irow">
+        <div class="ilbl">탭바 배경 이미지<small>maintabBgImage</small></div>
+        <label class="upbtn" id="ub-tbar">이미지 선택<input type="file" accept="image/*" onchange="up(this,'tbar')"></label>
+        <img class="thumb" id="th-tbar"><button class="delbtn" id="db-tbar" onclick="del('tbar')">✕ 제거</button>
+      </div>
+      <div id="tab-icon-area"></div>
+    </div>
+  </div>
+
+  <!-- 프로필 & 친구추가 -->
+  <div class="sec open" id="s5">
+    <div class="sec-hd" onclick="tog('s5')"><span class="t">프로필 & 친구추가</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <div class="irow">
+        <div class="ilbl">기본 프로필 이미지<small>profileImg01</small></div>
+        <label class="upbtn" id="ub-prof">이미지 선택<input type="file" accept="image/*" onchange="up(this,'prof')"></label>
+        <img class="thumb" id="th-prof"><button class="delbtn" id="db-prof" onclick="del('prof')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">친구추가 아이콘<small>findBtnAddFriend</small></div>
+        <label class="upbtn" id="ub-addfriend">이미지 선택<input type="file" accept="image/*" onchange="up(this,'addfriend')"></label>
+        <img class="thumb" id="th-addfriend"><button class="delbtn" id="db-addfriend" onclick="del('addfriend')">✕ 제거</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 친구목록 / 메인배경 -->
+  <div class="sec" id="s6">
+    <div class="sec-hd" onclick="tog('s6')"><span class="t">친구목록 / 메인배경</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <div class="row"><div class="lbl">배경색</div><div class="swatch"><input type="color" id="c-fbg" value="#ffffff" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">텍스트 색상</div><div class="swatch"><input type="color" id="c-fname" value="#111111" oninput="render()"></div></div>
+      <div class="irow">
+        <div class="ilbl">배경 이미지<small>mainBgImage</small></div>
+        <label class="upbtn" id="ub-mainbg">이미지 선택<input type="file" accept="image/*" onchange="up(this,'mainbg')"></label>
+        <img class="thumb" id="th-mainbg"><button class="delbtn" id="db-mainbg" onclick="del('mainbg')">✕ 제거</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 잠금화면 -->
+  <div class="sec" id="s7">
+    <div class="sec-hd" onclick="tog('s7')"><span class="t">잠금화면</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <div class="row"><div class="lbl">배경색</div><div class="swatch"><input type="color" id="c-lock" value="#1a1a2e" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">텍스트 색상</div><div class="swatch"><input type="color" id="c-lock-txt" value="#ffffff" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">키패드 텍스트 색상</div><div class="swatch"><input type="color" id="c-keypad-txt" value="#ffffff" oninput="render()"></div></div>
+      <div class="irow">
+        <div class="ilbl">배경 이미지<small>passcodeBgImage</small></div>
+        <label class="upbtn" id="ub-lockbg">이미지 선택<input type="file" accept="image/*" onchange="up(this,'lockbg')"></label>
+        <img class="thumb" id="th-lockbg"><button class="delbtn" id="db-lockbg" onclick="del('lockbg')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">비밀번호 01 (미입력)<small>passcodeImgCode01</small></div>
+        <label class="upbtn" id="ub-pin1off">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin1off')"></label>
+        <img class="thumb" id="th-pin1off"><button class="delbtn" id="db-pin1off" onclick="del('pin1off')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">비밀번호 02 (미입력)<small>passcodeImgCode02</small></div>
+        <label class="upbtn" id="ub-pin2off">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin2off')"></label>
+        <img class="thumb" id="th-pin2off"><button class="delbtn" id="db-pin2off" onclick="del('pin2off')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">비밀번호 03 (미입력)<small>passcodeImgCode03</small></div>
+        <label class="upbtn" id="ub-pin3off">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin3off')"></label>
+        <img class="thumb" id="th-pin3off"><button class="delbtn" id="db-pin3off" onclick="del('pin3off')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">비밀번호 04 (미입력)<small>passcodeImgCode04</small></div>
+        <label class="upbtn" id="ub-pin4off">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin4off')"></label>
+        <img class="thumb" id="th-pin4off"><button class="delbtn" id="db-pin4off" onclick="del('pin4off')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">비밀번호 01 (입력됨)<small>passcodeImgCode01Selected</small></div>
+        <label class="upbtn" id="ub-pin1on">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin1on')"></label>
+        <img class="thumb" id="th-pin1on"><button class="delbtn" id="db-pin1on" onclick="del('pin1on')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">비밀번호 02 (입력됨)<small>passcodeImgCode02Selected</small></div>
+        <label class="upbtn" id="ub-pin2on">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin2on')"></label>
+        <img class="thumb" id="th-pin2on"><button class="delbtn" id="db-pin2on" onclick="del('pin2on')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">비밀번호 03 (입력됨)<small>passcodeImgCode03Selected</small></div>
+        <label class="upbtn" id="ub-pin3on">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin3on')"></label>
+        <img class="thumb" id="th-pin3on"><button class="delbtn" id="db-pin3on" onclick="del('pin3on')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">비밀번호 04 (입력됨)<small>passcodeImgCode04Selected</small></div>
+        <label class="upbtn" id="ub-pin4on">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin4on')"></label>
+        <img class="thumb" id="th-pin4on"><button class="delbtn" id="db-pin4on" onclick="del('pin4on')">✕ 제거</button>
+      </div>
+      <div class="irow">
+        <div class="ilbl">키패드 누를 때 이미지<small>passcodeKeypadPressed</small></div>
+        <label class="upbtn" id="ub-keypad">이미지 선택<input type="file" accept="image/*" onchange="up(this,'keypad')"></label>
+        <img class="thumb" id="th-keypad"><button class="delbtn" id="db-keypad" onclick="del('keypad')">✕ 제거</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 알림/배너 -->
+  <div class="sec" id="s8">
+    <div class="sec-hd" onclick="tog('s8')"><span class="t">알림 / 배너</span><span class="v">▼</span></div>
+    <div class="sec-body">
+      <div class="row"><div class="lbl">메세지 알림바 배경색</div><div class="swatch"><input type="color" id="c-notif" value="#ffffff" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">알림 이름 색상</div><div class="swatch"><input type="color" id="c-notif-name" value="#333333" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">알림 메세지 색상</div><div class="swatch"><input type="color" id="c-notif-msg" value="#666666" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">전달완료 배너 배경색</div><div class="swatch"><input type="color" id="c-share" value="#ffffff" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">하단 배너 배경색</div><div class="swatch"><input type="color" id="c-banner" value="#333333" oninput="render()"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 미리보기 -->
+<div class="preview">
+  <div class="ptabs">
+    <button class="ptab on" onclick="sw('chat',this)">💬 채팅방</button>
+    <button class="ptab" onclick="sw('friend',this)">👥 친구목록</button>
+    <button class="ptab" onclick="sw('lock',this)">🔒 잠금화면</button>
+  </div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+
+      <!-- 채팅 -->
+      <div class="pscreen on" id="pv-chat">
+        <div id="pv-sbar" class="p-sbar"><span>9:41</span><span>●●● 🔋</span></div>
+        <div id="pv-chdr" class="p-chdr">
+          <span class="p-chdr-back">‹</span>
+          <div class="p-chdr-title">채팅방</div>
+          <div class="p-chdr-icons"><span>🔍</span><span>☰</span></div>
+        </div>
+        <div class="p-chatbg">
+          <div class="p-chatbg-color" id="pv-chatbg-color"></div>
+          <div class="p-chatbg-img" id="pv-chatbg-img"></div>
+          <div class="p-msgs">
+            <div class="p-date">오늘</div>
+            <div class="p-mrow">
+              <div class="p-av" id="pv-av1"><img id="pv-av1-img">🐱</div>
+              <div class="p-mcol">
+                <div class="p-mname">춘식이</div>
+                <div class="p-bwrap">
+                  <div class="p-bbl them" id="pv-bbl-them1"><div class="p-bbl-bg" id="pv-bbl-them1-bg"></div><span class="p-bbl-txt">안녕하세요 😊</span></div>
+                  <span class="p-mtime">9:41</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-mrow me">
+              <span class="p-mtime">9:42</span>
+              <div class="p-bbl me" id="pv-bbl-me1"><div class="p-bbl-bg" id="pv-bbl-me1-bg"></div><span class="p-bbl-txt">안녕하세요 ㅎㅎ</span></div>
+            </div>
+            <div class="p-mrow">
+              <div class="p-av" id="pv-av2"><img id="pv-av2-img">🐱</div>
+              <div class="p-mcol">
+                <div class="p-mname">춘식이</div>
+                <div class="p-bwrap">
+                  <div class="p-bbl them" id="pv-bbl-them2"><div class="p-bbl-bg" id="pv-bbl-them2-bg"></div><span class="p-bbl-txt">뭐 하세요? 🎬</span></div>
+                  <span class="p-mtime">9:43</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-mrow me">
+              <span class="p-mtime">9:44</span>
+              <div class="p-bbl me" id="pv-bbl-me2"><div class="p-bbl-bg" id="pv-bbl-me2-bg"></div><span class="p-bbl-txt">집에 있어요 😄</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="p-inbar" id="pv-inbar">
+          <span class="p-inico">＋</span>
+          <div class="p-inbox" id="pv-inbox">메시지 입력</div>
+          <span class="p-inico">🎤</span>
+        </div>
+        <div class="p-tbar" id="pv-tbar">
+          <div class="p-tbar-bg" id="pv-tbar-bg"></div>
+          <div class="p-titem" id="pti-friend-c"><img class="cico" id="pti-friend-c-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>친구</div>
+          <div class="p-titem" id="pti-chat-c"><img class="cico" id="pti-chat-c-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>채팅</div>
+          <div class="p-titem" id="pti-now-c"><img class="cico" id="pti-now-c-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>지금</div>
+          <div class="p-titem" id="pti-shop-c"><img class="cico" id="pti-shop-c-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>쇼핑</div>
+          <div class="p-titem" id="pti-more-c"><img class="cico" id="pti-more-c-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4"/></svg>더보기</div>
+        </div>
+      </div>
+
+      <!-- 친구목록 -->
+      <div class="pscreen" id="pv-friend">
+        <div class="p-fhdr" id="pv-fhdr"><div class="p-fhdr-t">친구</div><div class="p-fhdr-icons"><span>🔍</span><span>⊕</span><span>⚙️</span></div></div>
+        <div class="p-myprof" id="pv-myprof">
+          <div class="p-myav"><img id="pv-myav-img">😊</div>
+          <div><div class="p-myname" id="pv-myname">나의 이름</div><div class="p-mystatus">상태 메시지</div></div>
+        </div>
+        <div class="p-fsec" id="pv-fsec">친구 3</div>
+        <div class="p-fitems" id="pv-fitems">
+          <div class="p-fitem"><div class="p-fav"><img id="pv-fav1-img">🐻</div><div><div class="p-fname" id="pv-fn1">라이언</div><div class="p-fstatus">파이팅!</div></div></div>
+          <div class="p-fitem"><div class="p-fav"><img id="pv-fav2-img">🐱</div><div><div class="p-fname" id="pv-fn2">춘식이</div><div class="p-fstatus">🎵</div></div></div>
+          <div class="p-fitem"><div class="p-fav"><img id="pv-fav3-img">🦆</div><div><div class="p-fname" id="pv-fn3">어피치</div><div class="p-fstatus">✈️</div></div></div>
+        </div>
+        <div class="p-fill" id="pv-ffill"></div>
+        <div class="p-tbar" id="pv-tbar-f">
+          <div class="p-tbar-bg" id="pv-tbar-bg-f"></div>
+          <div class="p-titem" id="pti-friend-f"><img class="cico" id="pti-friend-f-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>친구</div>
+          <div class="p-titem" id="pti-chat-f"><img class="cico" id="pti-chat-f-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>채팅</div>
+          <div class="p-titem" id="pti-now-f"><img class="cico" id="pti-now-f-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>지금</div>
+          <div class="p-titem" id="pti-shop-f"><img class="cico" id="pti-shop-f-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>쇼핑</div>
+          <div class="p-titem" id="pti-more-f"><img class="cico" id="pti-more-f-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4"/></svg>더보기</div>
+        </div>
+      </div>
+
+      <!-- 잠금 -->
+      <div class="pscreen" id="pv-lock">
+        <div class="p-sbar" id="pv-lock-sbar" style="color:#fff"><span>9:41</span><span>🔋</span></div>
+        <div class="p-lock" id="pv-lock-screen">
+          <div class="p-lock-bg" id="pv-lock-bg"></div>
+          <div class="p-lock-content">
+            <div class="p-lock-time">09:41</div>
+            <div class="p-lock-date">3월 22일 일요일</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:4px">비밀번호를 입력하세요</div>
+            <div class="p-lock-dots">
+              <div class="p-lock-dot" id="pv-pin1" style="background:rgba(255,255,255,.8)"><img id="pv-pin1-img"></div>
+              <div class="p-lock-dot" id="pv-pin2" style="background:rgba(255,255,255,.8)"><img id="pv-pin2-img"></div>
+              <div class="p-lock-dot" id="pv-pin3" style="background:rgba(255,255,255,.25)"><img id="pv-pin3-img"></div>
+              <div class="p-lock-dot" id="pv-pin4" style="background:rgba(255,255,255,.25)"><img id="pv-pin4-img"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const I = {};
+
+// 탭 아이콘 목록 (리락쿠마 CSS 기반)
+const TABICONS = [
+  {k:'friend', label:'친구', fn:['maintabIcoFriends','maintabIcoFriendsSelected']},
+  {k:'chat',   label:'채팅', fn:['maintabIcoChats','maintabIcoChatsSelected']},
+  {k:'now',    label:'지금/오픈채팅', fn:['maintabIcoNow','maintabIcoNowSelected']},
+  {k:'shop',   label:'쇼핑', fn:['maintabIcoShopping','maintabIcoShoppingSelected']},
+  {k:'more',   label:'더보기', fn:['maintabIcoMore','maintabIcoMoreSelected']},
+  {k:'view',   label:'뷰', fn:['maintabIcoView','maintabIcoViewSelected']},
+  {k:'home',   label:'홈', fn:['maintabIcoHome','maintabIcoHomeSelected']},
+  {k:'find',   label:'친구찾기', fn:['maintabIcoFind','maintabIcoFindSelected']},
+  {k:'browse', label:'채널', fn:['maintabIcoBrowse','maintabIcoBrowseSelected']},
+  {k:'call',   label:'콜', fn:['maintabIcoCall','maintabIcoCallSelected']},
+];
+
+function buildTabIconUI() {
+  const area = document.getElementById('tab-icon-area');
+  area.innerHTML = TABICONS.map(t => `
+    <div style="background:#22222c;border-radius:8px;padding:7px 8px;margin-bottom:5px;margin-top:4px">
+      <div style="font-size:10px;color:#aaa;font-weight:700;margin-bottom:5px">${t.label} 탭</div>
+      <div style="display:flex;gap:6px">
+        <div style="flex:1">
+          <div style="font-size:9px;color:#555;margin-bottom:2px">미선택 (${t.fn[0]})</div>
+          <label class="upbtn" id="ub-${t.k}-off" style="padding:4px 7px;font-size:10px">이미지 선택<input type="file" accept="image/*" onchange="up(this,'${t.k}-off')"></label>
+          <img class="thumb" id="th-${t.k}-off" style="height:30px">
+          <button class="delbtn" id="db-${t.k}-off" onclick="del('${t.k}-off')">✕ 제거</button>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:9px;color:#555;margin-bottom:2px">선택됨 (${t.fn[1]})</div>
+          <label class="upbtn" id="ub-${t.k}-on" style="padding:4px 7px;font-size:10px">이미지 선택<input type="file" accept="image/*" onchange="up(this,'${t.k}-on')"></label>
+          <img class="thumb" id="th-${t.k}-on" style="height:30px">
+          <button class="delbtn" id="db-${t.k}-on" onclick="del('${t.k}-on')">✕ 제거</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function up(input, key) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    I[key] = { url: e.target.result };
+    const th = document.getElementById('th-' + key);
+    const db = document.getElementById('db-' + key);
+    const ub = document.getElementById('ub-' + key);
+    if (th) { th.src = e.target.result; th.classList.add('show'); }
+    if (db) db.classList.add('show');
+    if (ub) ub.classList.add('has');
+    render();
+    toast('업로드: ' + file.name);
+  };
+  reader.readAsDataURL(file);
+}
+
+function del(key) {
+  delete I[key];
+  const th = document.getElementById('th-' + key);
+  const db = document.getElementById('db-' + key);
+  const ub = document.getElementById('ub-' + key);
+  if (th) { th.src=''; th.classList.remove('show'); }
+  if (db) db.classList.remove('show');
+  if (ub) ub.classList.remove('has');
+  render();
+}
+
+function g(id) { const e = document.getElementById(id); return e ? e.value : ''; }
+function u(key) { return I[key] ? I[key].url : null; }
+
+function setStyle(id, prop, val) {
+  const e = document.getElementById(id);
+  if (e) e.style[prop] = val;
+}
+function setBg(id, key) {
+  const e = document.getElementById(id);
+  if (!e) return;
+  const url = u(key);
+  if (url) { e.style.backgroundImage = 'url(' + url + ')'; e.classList.add('on'); }
+  else { e.style.backgroundImage = ''; e.classList.remove('on'); }
+}
+function setImg(id, key) {
+  const e = document.getElementById(id);
+  if (!e) return;
+  const url = u(key);
+  if (url) { e.src = url; e.classList.add('on'); }
+  else { e.src = ''; e.classList.remove('on'); }
+}
+
+function render() {
+  const hdr   = g('c-hdr')   || '#EFBD16';
+  const chatbg= g('c-chatbg')|| '#B2C7D9';
+  const meTxt = g('c-me-txt')|| '#1a1a1a';
+  const thTxt = g('c-them-txt')|| '#1a1a1a';
+  const inbar = g('c-inbar') || '#f5f5f5';
+  const tbar  = g('c-tbar')  || '#ffffff';
+  const fbg   = g('c-fbg')   || '#ffffff';
+  const fname = g('c-fname') || '#111111';
+  const lock  = g('c-lock')  || '#1a1a2e';
+
+  // 헤더
+  setStyle('pv-sbar','background', hdr);
+  setStyle('pv-chdr','background', hdr);
+  setStyle('pv-lock-sbar','background', lock);
+
+  // 채팅 배경
+  setStyle('pv-chatbg-color','background', chatbg);
+  setBg('pv-chatbg-img', 'chatbg');
+
+  // 말풍선 텍스트
+  ['pv-bbl-me1','pv-bbl-me2'].forEach(id => setStyle(id,'color', meTxt));
+  ['pv-bbl-them1','pv-bbl-them2'].forEach(id => setStyle(id,'color', thTxt));
+
+  // 말풍선 이미지
+  setBg('pv-bbl-me1-bg',    'bbl-s1');
+  setBg('pv-bbl-me2-bg',    'bbl-s1');
+  setBg('pv-bbl-them1-bg',  'bbl-r1');
+  setBg('pv-bbl-them2-bg',  'bbl-r1');
+
+  // 입력창
+  setStyle('pv-inbar','background', inbar);
+
+  // 탭바
+  setStyle('pv-tbar','background', tbar);
+  setStyle('pv-tbar-f','background', tbar);
+  setBg('pv-tbar-bg', 'tbar');
+  setBg('pv-tbar-bg-f', 'tbar');
+
+  // 탭 아이콘
+  TABICONS.forEach(t => {
+    ['c','f'].forEach(s => {
+      const el  = document.getElementById('pti-' + t.k + '-' + s);
+      const ico = document.getElementById('pti-' + t.k + '-' + s + '-img');
+      const svg = el ? el.querySelector('svg') : null;
+      if (!ico || !svg) return;
+      const url = u(t.k + '-off');
+      if (url) { ico.src = url; ico.classList.add('on'); svg.classList.add('hide'); }
+      else { ico.classList.remove('on'); svg.classList.remove('hide'); }
+    });
+  });
+
+  // 프로필
+  ['pv-av1-img','pv-av2-img','pv-myav-img',
+   'pv-fav1-img','pv-fav2-img','pv-fav3-img'].forEach(id => setImg(id, 'prof'));
+
+  // 친구목록
+  ['pv-fhdr','pv-myprof','pv-fsec','pv-fitems','pv-ffill'].forEach(id => setStyle(id,'background', fbg));
+  ['pv-fn1','pv-fn2','pv-fn3','pv-myname'].forEach(id => setStyle(id,'color', fname));
+
+  // 잠금
+  setStyle('pv-lock-screen','background', lock);
+  setBg('pv-lock-bg', 'lockbg');
+
+  // 핀
+  const pinOnUrl  = u('pin1on');
+  const pinOffUrl = u('pin1off');
+  ['pv-pin1','pv-pin2'].forEach(id => {
+    const e = document.getElementById(id);
+    if (!e) return;
+    const img = e.querySelector('img');
+    if (pinOnUrl && img) { img.src = pinOnUrl; img.classList.add('on'); e.style.background = 'transparent'; }
+    else { if (img) img.classList.remove('on'); e.style.background = 'rgba(255,255,255,.8)'; }
+  });
+  ['pv-pin3','pv-pin4'].forEach(id => {
+    const e = document.getElementById(id);
+    if (!e) return;
+    const img = e.querySelector('img');
+    if (pinOffUrl && img) { img.src = pinOffUrl; img.classList.add('on'); e.style.background = 'transparent'; }
+    else { if (img) img.classList.remove('on'); e.style.background = 'rgba(255,255,255,.25)'; }
+  });
+}
+
+function sw(tab, btn) {
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.pscreen').forEach(s => s.classList.remove('on'));
+  document.getElementById('pv-' + tab).classList.add('on');
+}
+
+function tog(id) { document.getElementById(id).classList.toggle('open'); }
+
+// CSS 생성 - 리락쿠마 CSS 구조 100% 동일
+function buildCSS() {
+  const name  = g('m-name')  || 'MyTheme';
+  const id    = g('m-id')    || 'com.myname.mytheme';
+  const auth  = g('m-author')|| '';
+  const ver   = g('m-ver')   || '1.0';
+  const hdr   = g('c-hdr')   || '#EFBD16';
+  const chatbg= g('c-chatbg')|| '#B2C7D9';
+  const meTxt = g('c-me-txt')|| '#1a1a1a';
+  const thTxt = g('c-them-txt')|| '#1a1a1a';
+  const unread= g('c-unread')|| '#3c1e1e';
+  const inbar = g('c-inbar') || '#f5f5f5';
+  const tico  = g('c-tico')  || '#aaaaaa';
+  const intxt = g('c-intxt') || '#191919';
+  const tbar  = g('c-tbar')  || '#ffffff';
+  const fbg   = g('c-fbg')   || '#ffffff';
+  const fname = g('c-fname') || '#111111';
+  const lock  = g('c-lock')  || '#1a1a2e';
+  const locktxt = g('c-lock-txt') || '#ffffff';
+  const kptxt = g('c-keypad-txt') || '#ffffff';
+  const notif = g('c-notif') || '#ffffff';
+  const notifName = g('c-notif-name') || '#333333';
+  const notifMsg  = g('c-notif-msg')  || '#666666';
+  const share = g('c-share') || '#ffffff';
+  const banner= g('c-banner')|| '#333333';
+
+  // 탭 아이콘 fn 매핑
+  const TIFN = {};
+  TABICONS.forEach(t => {
+    TIFN[t.k+'-off'] = t.fn[0] + '.png';
+    TIFN[t.k+'-on']  = t.fn[1] + '.png';
+  });
+  const bblFN = {
+    'bbl-s1':    'chatroomBubbleSend01.png',
+    'bbl-s1sel': 'chatroomBubbleSend01Selected.png',
+    'bbl-s2':    'chatroomBubbleSend02.png',
+    'bbl-s2sel': 'chatroomBubbleSend02Selected.png',
+    'bbl-r1':    'chatroomBubbleReceive01.png',
+    'bbl-r1sel': 'chatroomBubbleReceive01Selected.png',
+    'bbl-r2':    'chatroomBubbleReceive02.png',
+    'bbl-r2sel': 'chatroomBubbleReceive02Selected.png',
+  };
+  const otherFN = {
+    'chatbg':   'chatroomBgImage.png',
+    'tbar':     'maintabBgImage.png',
+    'prof':     'profileImg01.png',
+    'addfriend':'findBtnAddFriend.png',
+    'mainbg':   'mainBgImage.png',
+    'lockbg':   'passcodeBgImage.png',
+    'pin1off':  'passcodeImgCode01.png',
+    'pin2off':  'passcodeImgCode02.png',
+    'pin3off':  'passcodeImgCode03.png',
+    'pin4off':  'passcodeImgCode04.png',
+    'pin1on':   'passcodeImgCode01Selected.png',
+    'pin2on':   'passcodeImgCode02Selected.png',
+    'pin3on':   'passcodeImgCode03Selected.png',
+    'pin4on':   'passcodeImgCode04Selected.png',
+    'keypad':   'passcodeKeypadPressed.png',
+  };
+  const allFN = {...TIFN, ...bblFN, ...otherFN};
+  // 이미지 경로: 업로드 있으면 파일명, 없으면 기본 파일명 (Images/ 없이)
+  const img = (key) => I[key] ? allFN[key] : allFN[key];
+
+  return `/*
+ Manifest
+ */
+
+ManifestStyle
+{
+    -kakaotalk-theme-name: '${name}';
+    -kakaotalk-theme-version: '${ver}';
+    -kakaotalk-theme-url: 'http://www.kakao.com';
+    -kakaotalk-author-name: '${auth}';
+    -kakaotalk-theme-id: '${id}';
+}
+
+
+/*
+ TabBar Style
+ */
+
+TabBarStyle-Main
+{
+    background-color: ${tbar};
+    -ios-background-image: '${img('tbar')}';
+    -ios-home-normal-icon-image: '${img('home-off')}';
+    -ios-home-selected-icon-image: '${img('home-on')}';
+    -ios-friends-normal-icon-image: '${img('friend-off')}';
+    -ios-friends-selected-icon-image: '${img('friend-on')}';
+    -ios-chats-normal-icon-image: '${img('chat-off')}';
+    -ios-chats-selected-icon-image: '${img('chat-on')}';
+    -ios-find-normal-icon-image: '${img('find-off')}';
+    -ios-find-selected-icon-image: '${img('find-on')}';
+    -ios-browse-normal-icon-image: '${img('browse-off')}';
+    -ios-browse-selected-icon-image: '${img('browse-on')}';
+    -ios-view-normal-icon-image: '${img('view-off')}';
+    -ios-view-selected-icon-image: '${img('view-on')}';
+    -ios-piccoma-normal-icon-image: '${img('now-off')}';
+    -ios-piccoma-selected-icon-image: '${img('now-on')}';
+    -ios-shopping-normal-icon-image: '${img('shop-off')}';
+    -ios-shopping-selected-icon-image: '${img('shop-on')}';
+    -ios-call-normal-icon-image: '${img('call-off')}';
+    -ios-call-selected-icon-image: '${img('call-on')}';
+    -ios-more-normal-icon-image: '${img('more-off')}';
+    -ios-more-selected-icon-image: '${img('more-on')}';
+}
+
+
+/*
+ MainView Style
+ */
+
+HeaderStyle-Main
+{
+    -ios-text-color: ${fname};
+    -ios-tab-text-color: ${fname};
+    -ios-tab-highlighted-text-color: ${fname};
+}
+
+MainViewStyle-Primary
+{
+    background-color: ${fbg};
+    -ios-background-image: '${img('mainbg')}';
+    -ios-text-color: ${fname};
+    -ios-highlighted-text-color: ${fname};
+    -ios-description-text-color: ${fname};
+    -ios-description-highlighted-text-color: ${fname};
+    -ios-paragraph-text-color: ${fname};
+    -ios-paragraph-highlighted-text-color: ${fname};
+    -ios-normal-background-color: ${fbg};
+    -ios-normal-background-alpha: 0.0;
+    -ios-selected-background-color: ${fbg};
+    -ios-selected-background-alpha: 0.05;
+}
+
+MainViewStyle-Secondary
+{
+    background-color: ${fbg};
+}
+
+SectionTitleStyle-Main
+{
+    border-color: ${fname};
+    border-alpha: 0.09;
+    -ios-text-color: ${fname};
+    -ios-text-alpha: 1.0;
+}
+
+
+/*
+ Feature Style
+ */
+
+FeatureStyle-Primary
+{
+    -ios-text-color: ${fname};
+}
+
+ButtonStyle-AddFriend
+{
+    -ios-image: '${img('addfriend')}';
+}
+
+
+/*
+ DefaultProfile Style
+ */
+
+DefaultProfileStyle
+{
+    -ios-profile-images: '${img('prof')}';
+}
+
+
+/*
+ ChatRoom Style
+ */
+
+BackgroundStyle-ChatRoom
+{
+    background-color: ${chatbg};
+    -ios-background-image: '${img('chatbg')}';
+}
+
+InputBarStyle-Chat
+{
+    background-color: ${inbar};
+    -ios-send-normal-background-color: ${hdr};
+    -ios-send-normal-foreground-color: #FFFFFF;
+    -ios-send-highlighted-background-color: ${hdr};
+    -ios-send-highlighted-foreground-color: #FFFFFF;
+    -ios-button-normal-foreground-color: ${tico};
+    -ios-button-highlighted-foreground-color: ${tico};
+    -ios-button-text-color: ${intxt};
+    -ios-button-normal-background-color: #FFFFFF;
+    -ios-button-normal-background-alpha: 100;
+}
+
+
+/*
+ Message Style
+ */
+
+MessageCellStyle-Send
+{
+    -ios-background-image: '${img('bbl-s1')}' 26px 24px;
+    -ios-selected-background-image: '${img('bbl-s1sel')}' 26px 24px;
+    -ios-group-background-image: '${img('bbl-s2')}' 26px 24px;
+    -ios-group-selected-background-image: '${img('bbl-s2sel')}' 26px 24px;
+    -ios-title-edgeinsets: 14px 20px 8px 26px;
+    -ios-group-title-edgeinsets: 14px 20px 8px 26px;
+    -ios-text-color: ${meTxt};
+    -ios-selected-text-color: ${meTxt};
+    -ios-unread-text-color: ${unread};
+}
+
+MessageCellStyle-Receive
+{
+    -ios-background-image: '${img('bbl-r1')}' 29px 24px;
+    -ios-selected-background-image: '${img('bbl-r1sel')}' 29px 24px;
+    -ios-group-background-image: '${img('bbl-r2')}' 29px 24px;
+    -ios-group-selected-background-image: '${img('bbl-r2sel')}' 29px 24px;
+    -ios-title-edgeinsets: 14px 23px 8px 20px;
+    -ios-group-title-edgeinsets: 14px 23px 8px 20px;
+    -ios-text-color: ${thTxt};
+    -ios-selected-text-color: ${thTxt};
+    -ios-unread-text-color: ${unread};
+}
+
+
+/*
+ Passcode Style
+ */
+
+BackgroundStyle-Passcode
+{
+    background-color: ${lock};
+    -ios-background-image: '${img('lockbg')}';
+}
+
+LabelStyle-PasscodeTitle
+{
+    -ios-text-color: ${locktxt};
+}
+
+PasscodeStyle
+{
+    -ios-bullet-first-image: '${img('pin1off')}';
+    -ios-bullet-second-image: '${img('pin2off')}';
+    -ios-bullet-third-image: '${img('pin3off')}';
+    -ios-bullet-fourth-image: '${img('pin4off')}';
+    -ios-bullet-selected-first-image: '${img('pin1on')}';
+    -ios-bullet-selected-second-image: '${img('pin2on')}';
+    -ios-bullet-selected-third-image: '${img('pin3on')}';
+    -ios-bullet-selected-fourth-image: '${img('pin4on')}';
+    -ios-keypad-background-color: ${lock};
+    -ios-keypad-text-normal-color: ${kptxt};
+    -ios-keypad-number-highlighted-image: '${img('keypad')}';
+}
+
+
+/*
+ Message Notification Bar Style
+ */
+
+BackgroundStyle-MessageNotificationBar
+{
+    background-color: ${notif};
+}
+
+LabelStyle-MessageNotificationBarName
+{
+    -ios-text-color: ${notifName};
+}
+
+LabelStyle-MessageNotificationBarMessage
+{
+    -ios-text-color: ${notifMsg};
+}
+
+
+/*
+ Direct Share
+ */
+
+BackgroundStyle-DirectShareBar
+{
+    background-color: ${share};
+}
+
+LabelStyle-DirectShareBarName
+{
+    -ios-text-color: ${fname};
+}
+
+LabelStyle-DirectShareBarMessage
+{
+    -ios-text-color: ${fname};
+}
+
+
+/*
+ BottomBanner Style
+ */
+
+BottomBannerStyle {
+    background-color: ${banner};
+}
+`;
+}
+
+async function generate() {
+  if (typeof JSZip === 'undefined') { toast('JSZip 로딩 중...'); return; }
+  try {
+    const name = g('m-name') || 'MyTheme';
+    const zip = new JSZip();
+    const imgFolder = zip.folder('Images');
+
+    zip.file('KakaoTalkTheme.css', buildCSS());
+
+    // 파일명 맵
+    const TABFN = {};
+    TABICONS.forEach(t => { TABFN[t.k+'-off'] = t.fn[0]; TABFN[t.k+'-on'] = t.fn[1]; });
+    const FILEMAP = {
+      ...TABFN,
+      'chatbg':   'chatroomBgImage',
+      'bbl-s1':   'chatroomBubbleSend01',
+      'bbl-s1sel':'chatroomBubbleSend01Selected',
+      'bbl-s2':   'chatroomBubbleSend02',
+      'bbl-s2sel':'chatroomBubbleSend02Selected',
+      'bbl-r1':   'chatroomBubbleReceive01',
+      'bbl-r1sel':'chatroomBubbleReceive01Selected',
+      'bbl-r2':   'chatroomBubbleReceive02',
+      'bbl-r2sel':'chatroomBubbleReceive02Selected',
+      'tbar':     'maintabBgImage',
+      'prof':     'profileImg01',
+      'addfriend':'findBtnAddFriend',
+      'mainbg':   'mainBgImage',
+      'lockbg':   'passcodeBgImage',
+      'pin1off':  'passcodeImgCode01',
+      'pin2off':  'passcodeImgCode02',
+      'pin3off':  'passcodeImgCode03',
+      'pin4off':  'passcodeImgCode04',
+      'pin1on':   'passcodeImgCode01Selected',
+      'pin2on':   'passcodeImgCode02Selected',
+      'pin3on':   'passcodeImgCode03Selected',
+      'pin4on':   'passcodeImgCode04Selected',
+      'keypad':   'passcodeKeypadPressed',
+    };
+
+    for (const [key, fn] of Object.entries(FILEMAP)) {
+      if (!I[key]) continue;
+      const b64 = I[key].url.split(',')[1];
+      imgFolder.file(fn + '@2x.png', b64, { base64: true });
+      imgFolder.file(fn + '@3x.png', b64, { base64: true });
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const blobUrl = URL.createObjectURL(blob);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = name + '.ktheme';
+    if (isIOS) a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+    toast(isIOS ? '파일 앱에 저장해주세요!' : name + '.ktheme 생성 완료!');
+  } catch(e) {
+    toast('오류: ' + e.message);
+    console.error(e);
+  }
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('on'), 2800);
+}
+
+buildTabIconUI();
+render();
+</script>
+</body>
+</html>
