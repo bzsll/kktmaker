@@ -279,11 +279,6 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         <label class="upbtn" id="ub-prof">이미지 선택<input type="file" accept="image/*" onchange="up(this,'prof')"></label>
         <img class="thumb" id="th-prof"><button class="delbtn" id="db-prof" onclick="del('prof')">✕ 제거</button>
       </div>
-      <div class="irow">
-        <div class="ilbl">친구추가 아이콘</div>
-        <label class="upbtn" id="ub-addfriend">이미지 선택<input type="file" accept="image/*" onchange="up(this,'addfriend')"></label>
-        <img class="thumb" id="th-addfriend"><button class="delbtn" id="db-addfriend" onclick="del('addfriend')">✕ 제거</button>
-      </div>
     </div>
   </div>
 
@@ -354,11 +349,6 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         <label class="upbtn" id="ub-pin4on">이미지 선택<input type="file" accept="image/*" onchange="up(this,'pin4on')"></label>
         <img class="thumb" id="th-pin4on"><button class="delbtn" id="db-pin4on" onclick="del('pin4on')">✕ 제거</button>
       </div>
-      <div class="irow">
-        <div class="ilbl">키패드 누를 때 이미지</div>
-        <label class="upbtn" id="ub-keypad">이미지 선택<input type="file" accept="image/*" onchange="up(this,'keypad')"></label>
-        <img class="thumb" id="th-keypad"><button class="delbtn" id="db-keypad" onclick="del('keypad')">✕ 제거</button>
-      </div>
     </div>
   </div>
 
@@ -369,8 +359,6 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
       <div class="row"><div class="lbl">메세지 알림바 배경색</div><div class="swatch"><input type="color" id="c-notif" value="#ffffff" oninput="render()"></div></div>
       <div class="row"><div class="lbl">알림 이름 색상</div><div class="swatch"><input type="color" id="c-notif-name" value="#333333" oninput="render()"></div></div>
       <div class="row"><div class="lbl">알림 메세지 색상</div><div class="swatch"><input type="color" id="c-notif-msg" value="#666666" oninput="render()"></div></div>
-      <div class="row"><div class="lbl">전달완료 배너 배경색</div><div class="swatch"><input type="color" id="c-share" value="#ffffff" oninput="render()"></div></div>
-      <div class="row"><div class="lbl">하단 배너 배경색</div><div class="swatch"><input type="color" id="c-banner" value="#333333" oninput="render()"></div></div>
     </div>
   </div>
 
@@ -1159,6 +1147,9 @@ function render() {
 
   // 입력창
   setStyle('pv-inbar','background', inbar);
+  setStyle('pv-inbox','color', g('c-intxt') || '#191919');
+  const pvInbar = document.getElementById('pv-inbar');
+  if (pvInbar) pvInbar.querySelectorAll('svg').forEach(s => s.style.color = g('c-tico') || '#aaaaaa');
 
   // 탭바
   setStyle('pv-tbar','background', tbar);
@@ -1196,42 +1187,60 @@ function render() {
   // 친구목록
   ['pv-myprof','pv-fsec','pv-fitems','pv-ffill'].forEach(id => setStyle(id,'background', fbg));
   ['pv-fn1','pv-fn2','pv-fn3','pv-myname'].forEach(id => setStyle(id,'color', fname));
+  // 친구목록 배경이미지
+  const mainbgUrl = u('mainbg');
+  const friendScreens = ['pv-myprof','pv-fsec','pv-fitems','pv-ffill','pv-fhdr'];
+  if (mainbgUrl) {
+    const pvFriend = document.getElementById('pv-friend');
+    if (pvFriend) pvFriend.style.backgroundImage = `url(${mainbgUrl})`;
+    if (pvFriend) pvFriend.style.backgroundSize = 'cover';
+  } else {
+    const pvFriend = document.getElementById('pv-friend');
+    if (pvFriend) pvFriend.style.backgroundImage = '';
+  }
   // 보조 텍스트색 = fname에 투명도 60% (상태메시지, 마지막메시지)
   const fnameSubtle = fname + '99';
   document.querySelectorAll('.p-fstatus, .p-mystatus').forEach(el => el.style.color = fnameSubtle);
 
   // 잠금
   setStyle('pv-lock-screen','background', lock);
-  setBg('pv-lock-bg', 'lockbg');
+  // 배경이미지는 p-lock-content 위에만 (키패드 영역 제외)
+  const lockbgUrl = u('lockbg');
+  const lockContent = document.getElementById('pv-lock-screen');
+  if (lockContent) {
+    if (lockbgUrl) {
+      lockContent.style.backgroundImage = `url(${lockbgUrl})`;
+      lockContent.style.backgroundSize = 'cover';
+      lockContent.style.backgroundPosition = 'center';
+    } else {
+      lockContent.style.backgroundImage = '';
+    }
+  }
+  // 키패드 배경은 항상 별도로 유지
   const locktxt  = g('c-lock-txt')   || '#000000';
   const kptxt    = g('c-keypad-txt') || '#000000';
   const kpbg     = g('c-keypad-bg')  || '#f0f0f0';
-  // 안내 문구 색
   setStyle('pv-lock-msg', 'color', locktxt);
-  // 키패드 배경
   setStyle('pv-keypad-bg', 'background', kpbg);
-  // 키패드 숫자 색
   document.querySelectorAll('.p-keypad-btn').forEach(el => el.style.color = kptxt);
 
-  // 핀 - 각 자리별 이미지 반영
-  const pinKeys = ['pin1on','pin2on','pin3on','pin4on'];
-  const pinOffKeys = ['pin1off','pin2off','pin3off','pin4off'];
+  // 핀 이미지 반영
   ['pv-pin1','pv-pin2','pv-pin3','pv-pin4'].forEach((id, i) => {
     const e = document.getElementById(id);
     if (!e) return;
     const img = e.querySelector('img');
-    const onUrl  = u(pinKeys[i]);
-    const offUrl = u(pinOffKeys[i]);
-    const showUrl = i < 2 ? onUrl : offUrl;
+    // pin1,2: 입력됨(on) / pin3,4: 미입력(off) 으로 미리보기
+    const onUrl  = u(['pin1on','pin2on','pin3on','pin4on'][i]);
+    const offUrl = u(['pin1off','pin2off','pin3off','pin4off'][i]);
+    const showUrl = i < 2 ? (onUrl || offUrl) : (offUrl || onUrl);
     if (showUrl && img) {
-      img.src = showUrl; img.classList.add('on');
+      img.src = showUrl; img.style.display = 'block';
+      img.style.width = '100%'; img.style.height = '100%';
+      img.style.objectFit = 'contain';
       e.style.background = 'transparent';
     } else {
-      if (img) img.classList.remove('on');
-      // 배경색에 따라 핀 색상 조정
-      e.style.background = i < 2
-        ? 'rgba(128,128,128,0.7)'
-        : 'rgba(128,128,128,0.3)';
+      if (img) img.style.display = 'none';
+      e.style.background = i < 2 ? 'rgba(128,128,128,0.7)' : 'rgba(128,128,128,0.3)';
     }
   });
 
@@ -1503,17 +1512,16 @@ LabelStyle-PasscodeTitle
 
 PasscodeStyle
 {
-    -ios-bullet-first-image: '${img('pin1off')}';
-    -ios-bullet-second-image: '${img('pin2off')}';
-    -ios-bullet-third-image: '${img('pin3off')}';
-    -ios-bullet-fourth-image: '${img('pin4off')}';
-    -ios-bullet-selected-first-image: '${img('pin1on')}';
-    -ios-bullet-selected-second-image: '${img('pin2on')}';
-    -ios-bullet-selected-third-image: '${img('pin3on')}';
-    -ios-bullet-selected-fourth-image: '${img('pin4on')}';
+    ${I['pin1off'] ? `-ios-bullet-first-image: '${img('pin1off')}';` : ''}
+    ${I['pin2off'] ? `-ios-bullet-second-image: '${img('pin2off')}';` : ''}
+    ${I['pin3off'] ? `-ios-bullet-third-image: '${img('pin3off')}';` : ''}
+    ${I['pin4off'] ? `-ios-bullet-fourth-image: '${img('pin4off')}';` : ''}
+    ${I['pin1on'] ? `-ios-bullet-selected-first-image: '${img('pin1on')}';` : ''}
+    ${I['pin2on'] ? `-ios-bullet-selected-second-image: '${img('pin2on')}';` : ''}
+    ${I['pin3on'] ? `-ios-bullet-selected-third-image: '${img('pin3on')}';` : ''}
+    ${I['pin4on'] ? `-ios-bullet-selected-fourth-image: '${img('pin4on')}';` : ''}
     -ios-keypad-background-color: ${kpbg};
     -ios-keypad-text-normal-color: ${kptxt};
-    -ios-keypad-number-highlighted-image: '${img('keypad')}';
 }
 
 
@@ -1605,6 +1613,12 @@ async function generate() {
       'pin4on':   'passcodeImgCode04Selected',
       'keypad':   'passcodeKeypadPressed',
     };
+    // 테마 아이콘은 루트에 저장
+    if (I['themeico']) {
+      const b64ico = I['themeico'].url.split(',')[1];
+      zip.file('commonIcoTheme@2x.png', b64ico, { base64: true });
+      zip.file('commonIcoTheme@3x.png', b64ico, { base64: true });
+    }
 
     for (const [key, fn] of Object.entries(FILEMAP)) {
       if (!I[key]) continue;
