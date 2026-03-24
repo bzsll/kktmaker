@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💭 테마 제작 메이커 (iOS)</title>
+<title>💭 테마 메이커 (iOS)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -130,9 +130,9 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 <div class="hdr">
   <div class="hdr-title">
     💭 테마 제작 메이커 (iOS)
-    <div style="font-size:11px;font-weight:400;color:rgba(254,229,0,.8);margin-top:2px">@bzsll 제작</div>
+    <div style="font-size:11px;font-weight:400;color:rgba(254,229,0,.8);margin-top:2px">@bzsll</div>
   </div>
-  <button class="hdr-btn" onclick="generate()">💭 .ktheme 생성</button>
+  <button class="hdr-btn" onclick="generate()">테마 생성</button>
 </div>
 <div class="main">
 <div class="panel">
@@ -143,7 +143,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     <div class="sec-body">
       <div class="irow" style="padding-top:4px">
         <div class="ilbl">테마 이름</div>
-        <input class="minput" id="m-name" value="MyTheme" style="margin:0">
+        <input class="minput" id="m-name" value="테마 이름" style="margin:0">
       </div>
       <div class="irow">
         <div class="ilbl">테마 아이콘</div>
@@ -157,7 +157,6 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
   <div class="sec open" id="s1">
     <div class="sec-hd" onclick="tog('s1')"><span class="t">채팅방</span><span class="v">▼</span></div>
     <div class="sec-body">
-      <div class="row"><div class="lbl">헤더 / 보내기버튼 색상</div><div class="swatch"><input type="color" id="c-hdr" value="#EFBD16" oninput="render()"></div></div>
       <div class="row"><div class="lbl">채팅 배경색</div><div class="swatch"><input type="color" id="c-chatbg" value="#B2C7D9" oninput="render()"></div></div>
       <div class="irow">
         <div class="ilbl">채팅방 배경 이미지</div>
@@ -378,8 +377,8 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 
       <!-- 채팅 -->
       <div class="pscreen on" id="pv-chat">
-        <div id="pv-sbar" class="p-sbar"><span>9:41</span><span style="display:flex;align-items:center;gap:3px"><svg width="14" height="11" viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="currentColor" opacity=".5"/></svg></span></div>
-        <div id="pv-chdr" class="p-chdr">
+        <div id="pv-sbar" class="p-sbar" style="background:transparent !important; position:relative; z-index:10;"><span>9:41</span><span style="display:flex;align-items:center;gap:3px"><svg width="14" height="11" viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="currentColor" opacity=".5"/></svg></span></div>
+        <div id="pv-chdr" class="p-chdr" style="background:transparent !important; position:relative; z-index:10;">
           <span class="p-chdr-back">‹</span>
           <div class="p-chdr-title">채팅방</div>
           <div class="p-chdr-icons">
@@ -436,9 +435,9 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         <div class="p-inbar" id="pv-inbar">
           <svg id="pv-menu-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
           <div class="p-inbox" id="pv-inbox">메시지 입력</div>
-          <div id="pv-send-btn" style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </div>
+<div id="pv-send-btn" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;font-weight:bold;">
+  ↑
+</div>
         </div>
         <div class="p-tbar" id="pv-tbar">
           <div class="p-tbar-bg" id="pv-tbar-bg"></div>
@@ -466,9 +465,9 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         </div>
         <div class="p-fsec" id="pv-fsec">친구 3</div>
         <div class="p-fitems" id="pv-fitems">
-          <div class="p-fitem"><div class="p-fav"><img id="pv-fav1-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><div class="p-fname" id="pv-fn1">라이언</div><div class="p-fstatus">파이팅!</div></div></div>
-          <div class="p-fitem"><div class="p-fav"><img id="pv-fav2-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><div class="p-fname" id="pv-fn2">춘식이</div><div class="p-fstatus">---</div></div></div>
-          <div class="p-fitem"><div class="p-fav"><img id="pv-fav3-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><div class="p-fname" id="pv-fn3">어피치</div><div class="p-fstatus">---</div></div></div>
+          <div class="p-fitem"><div class="p-fav"><img id="pv-fav1-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><div class="p-fname" id="pv-fn1">라이언</div><div class="p-fstatus">상태메세지</div></div></div>
+          <div class="p-fitem"><div class="p-fav"><img id="pv-fav2-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><div class="p-fname" id="pv-fn2">춘식이</div><div class="p-fstatus">상태메세지</div></div></div>
+          <div class="p-fitem"><div class="p-fav"><img id="pv-fav3-img"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div><div class="p-fname" id="pv-fn3">어피치</div><div class="p-fstatus">상태메세지</div></div></div>
         </div>
         <div class="p-fill" id="pv-ffill"></div>
         <div class="p-tbar" id="pv-tbar-f">
@@ -518,32 +517,21 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 
       <!-- 알림 -->
       <div class="pscreen" id="pv-notif">
-        <div class="p-sbar" style="background:#f0f0f0;color:#333"><span>9:41</span><span style="display:flex;align-items:center;gap:3px"><svg width="11" height="11" viewBox="0 0 24 18" fill="none" stroke="#333" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="#333" opacity=".5"/></svg></span></div>
-        <div id="pv-notif-bar" style="margin:8px;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)">
-          <div style="width:32px;height:32px;border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#ddd;position:relative">
-            <img id="pv-notif-av-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          </div>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:11px;font-weight:700" id="pv-notif-name">알림 이름</div>
-            <div style="font-size:10px;opacity:.8;margin-top:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" id="pv-notif-msg">알림 메세지입니다</div>
-          </div>
-        </div>
-        <div id="pv-share-bar" style="margin:0 8px;border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)">
-          <div style="font-size:10px;flex:1" id="pv-share-name">전달완료 배너입니다</div>
-          <div style="font-size:9px;opacity:.6">방금</div>
-        </div>
-        <div style="flex:1;background:#f5f5f5"></div>
-        <div style="position:relative">
-          <div id="pv-banner" style="padding:10px 14px;display:flex;align-items:center;gap:8px">
-            <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div class="p-sbar" style="background:#f0f0f0;color:#333"><span>9:41</span></div>
+        <div id="pv-notif-bg" style="flex:1; background:#f5f5f5; display:flex; flex-direction:column; align-items:center;">
+          <div id="pv-notif-bar" style="margin:15px; border-radius:12px; padding:12px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,.1); background:#fff; width:90%;">
+            <div style="width:35px;height:35px;border-radius:8px;background:#ddd;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;">
+              <img id="pv-notif-av-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
             </div>
-            <div>
-              <div style="font-size:10px;font-weight:700;color:#fff">카카오톡</div>
-              <div style="font-size:9px;color:rgba(255,255,255,.7)">새 메세지가 있습니다</div>
+            <div style="flex:1;">
+              <div style="font-size:11px;font-weight:700;" id="pv-notif-name">알림 이름</div>
+              <div style="font-size:10px;color:#666;" id="pv-notif-msg">메시지가 도착했습니다.</div>
             </div>
           </div>
+        </div>
+      </div>
+
         </div>
       </div>
 
@@ -601,7 +589,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 <script>
 const I = {};
 
-// 탭 아이콘 목록 (리락쿠마 CSS 기반)
+
 const TABICONS = [
   {k:'friend', label:'친구',         fn:['maintabIcoFriends','maintabIcoFriendsSelected']},
   {k:'chat',   label:'채팅',         fn:['maintabIcoChats','maintabIcoChatsSelected']},
@@ -1196,22 +1184,25 @@ function render() {
   ['pv-fn1','pv-fn2','pv-fn3','pv-myname'].forEach(id => setStyle(id,'color', fname));
   // 친구목록 배경이미지
   const mainbgUrl = u('mainbg');
-  const friendScreens = ['pv-myprof','pv-fsec','pv-fitems','pv-ffill','pv-fhdr'];
+const pvFriend = document.getElementById('pv-friend');
+if (pvFriend) {
+  pvFriend.style.backgroundColor = fbg; // 배경색 우선 적용
   if (mainbgUrl) {
-    const pvFriend = document.getElementById('pv-friend');
-    if (pvFriend) pvFriend.style.backgroundImage = `url(${mainbgUrl})`;
-    if (pvFriend) pvFriend.style.backgroundSize = 'cover';
+    pvFriend.style.backgroundImage = `url(${mainbgUrl})`;
+    pvFriend.style.backgroundSize = 'cover';
+    pvFriend.style.backgroundPosition = 'center';
   } else {
-    const pvFriend = document.getElementById('pv-friend');
-    if (pvFriend) pvFriend.style.backgroundImage = '';
+    pvFriend.style.backgroundImage = '';
   }
-  // 보조 텍스트색 = fname에 투명도 60% (상태메시지, 마지막메시지)
+}
+
+
   const fnameSubtle = fname + '99';
   document.querySelectorAll('.p-fstatus, .p-mystatus').forEach(el => el.style.color = fnameSubtle);
 
-  // 잠금
+
   setStyle('pv-lock-screen','background', lock);
-  // 배경이미지는 p-lock-content 위에만 (키패드 영역 제외)
+
   const lockbgUrl = u('lockbg');
   const lockContent = document.getElementById('pv-lock-screen');
   if (lockContent) {
@@ -1223,7 +1214,7 @@ function render() {
       lockContent.style.backgroundImage = '';
     }
   }
-  // 키패드 배경은 항상 별도로 유지
+
   const locktxt  = g('c-lock-txt')   || '#000000';
   const kptxt    = g('c-keypad-txt') || '#000000';
   const kpbg     = g('c-keypad-bg')  || '#f0f0f0';
@@ -1231,12 +1222,12 @@ function render() {
   setStyle('pv-keypad-bg', 'background', kpbg);
   document.querySelectorAll('.p-keypad-btn').forEach(el => el.style.color = kptxt);
 
-  // 핀 이미지 반영
+
   ['pv-pin1','pv-pin2','pv-pin3','pv-pin4'].forEach((id, i) => {
     const e = document.getElementById(id);
     if (!e) return;
     const img = e.querySelector('img');
-    // pin1,2: 입력됨(on) / pin3,4: 미입력(off) 으로 미리보기
+
     const onUrl  = u(['pin1on','pin2on','pin3on','pin4on'][i]);
     const offUrl = u(['pin1off','pin2off','pin3off','pin4off'][i]);
     const showUrl = i < 2 ? (onUrl || offUrl) : (offUrl || onUrl);
@@ -1251,7 +1242,7 @@ function render() {
     }
   });
 
-  // 알림바
+
   const notif     = g('c-notif')     || '#ffffff';
   const notifName = g('c-notif-name')|| '#333333';
   const notifMsg  = g('c-notif-msg') || '#666666';
@@ -1274,7 +1265,7 @@ function sw(tab, btn) {
 
 function tog(id) { document.getElementById(id).classList.toggle('open'); }
 
-// CSS 생성 - 리락쿠마 CSS 구조 100% 동일
+
 function buildCSS() {
   const name  = g('m-name')  || 'MyTheme';
   const id    = g('m-id')    || 'com.myname.mytheme';
@@ -1301,7 +1292,7 @@ function buildCSS() {
   const share = g('c-share') || '#ffffff';
   const banner= g('c-banner')|| '#333333';
 
-  // 탭 아이콘 fn 매핑
+
   const TIFN = {};
   TABICONS.forEach(t => {
     TIFN[t.k+'-off'] = t.fn[0] + '.png';
@@ -1336,7 +1327,7 @@ function buildCSS() {
     'themeico': 'commonIcoTheme.png',
   };
   const allFN = {...TIFN, ...bblFN, ...otherFN};
-  // 이미지 경로: 업로드된 것만 파일명 반환, 없으면 빈 문자열
+
   const img = (key) => I[key] ? (allFN[key] || '') : '';
 
   return `/*
@@ -1617,7 +1608,6 @@ async function generate() {
       'pin4on':   'passcodeImgCode04Selected',
       'keypad':   'passcodeKeypadPressed',
     };
-    // 테마 아이콘은 Images/ 폴더에 저장 (확장자 .png, 배율 없음)
     if (I['themeico']) {
       const b64ico = I['themeico'].url.split(',')[1];
       imgFolder.file('commonIcoTheme.png', b64ico, { base64: true });
@@ -1633,11 +1623,11 @@ async function generate() {
     const blob = await zip.generateAsync({ type: 'blob' });
     const name_ = name + '.ktheme';
 
-    // base64로 변환해서 data URL로 열기 - 파일앱/Safari 모두 호환
+
     const reader = new FileReader();
     reader.onload = function() {
       const dataUrl = reader.result;
-      // data URL을 새 탭으로 열면 iOS에서 파일 저장 가능
+
       const a = document.createElement('a');
       a.href = dataUrl;
       a.download = name_;
