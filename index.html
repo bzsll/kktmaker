@@ -434,9 +434,11 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
           </div>
         </div>
         <div class="p-inbar" id="pv-inbar">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <svg id="pv-menu-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
           <div class="p-inbox" id="pv-inbox">메시지 입력</div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          <div id="pv-send-btn" style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </div>
         </div>
         <div class="p-tbar" id="pv-tbar">
           <div class="p-tbar-bg" id="pv-tbar-bg"></div>
@@ -1020,8 +1022,8 @@ function render() {
   if (preview) preview.style.background = '';
 
   // 헤더
-  setStyle('pv-sbar','background', chatbg);  // 채팅 헤더 = 채팅 배경색
-  setStyle('pv-chdr','background', chatbg);
+  setStyle('pv-sbar','background', hdr);
+  setStyle('pv-chdr','background', hdr);
   setStyle('pv-lock-sbar','background', lock);
 
   // 13. unread 뱃지 - 배경 없이 글씨색만
@@ -1148,8 +1150,13 @@ function render() {
   // 입력창
   setStyle('pv-inbar','background', inbar);
   setStyle('pv-inbox','color', g('c-intxt') || '#191919');
-  const pvInbar = document.getElementById('pv-inbar');
-  if (pvInbar) pvInbar.querySelectorAll('svg').forEach(s => s.style.color = g('c-tico') || '#aaaaaa');
+  // 메뉴 아이콘색
+  const ticoVal = g('c-tico') || '#aaaaaa';
+  const pvMenuIco = document.getElementById('pv-menu-ico');
+  if (pvMenuIco) pvMenuIco.style.stroke = ticoVal;
+  // 보내기버튼색
+  const pvSendBtn = document.getElementById('pv-send-btn');
+  if (pvSendBtn) pvSendBtn.style.background = hdr;
 
   // 탭바
   setStyle('pv-tbar','background', tbar);
@@ -1329,12 +1336,8 @@ function buildCSS() {
     'themeico': 'commonIcoTheme.png',
   };
   const allFN = {...TIFN, ...bblFN, ...otherFN};
-  // 이미지 경로: 업로드 있으면 파일명, 없으면 기본 파일명 (Images/ 없이)
-  // 이미지 경로: 업로드 있으면 파일명 사용, 없으면 파일명만 (Images/ 없이)
-  // 연속(s2/r2)은 기본(s1/r1)으로 자동 fallback 안함 - 업로드된 것만 사용
-  const img = (key) => allFN[key] || '';
-  // 연속 이미지: 업로드 없으면 기본 이미지 파일명으로 fallback
-  const imgFallback = (key, fallbackKey) => allFN[key] || '';
+  // 이미지 경로: 업로드된 것만 파일명 반환, 없으면 빈 문자열
+  const img = (key) => I[key] ? (allFN[key] || '') : '';
 
   return `/*
  Manifest
@@ -1379,6 +1382,7 @@ TabBarStyle-Main
 
 HeaderStyle-Main
 {
+    background-color: ${hdr};
     -ios-text-color: ${fname};
     -ios-tab-text-color: ${fname};
     -ios-tab-highlighted-text-color: ${fname};
