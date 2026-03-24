@@ -158,6 +158,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     <div class="sec-hd" onclick="tog('s1')"><span class="t">채팅방</span><span class="v">▼</span></div>
     <div class="sec-body">
       <div class="row"><div class="lbl">채팅 배경색</div><div class="swatch"><input type="color" id="c-chatbg" value="#B2C7D9" oninput="render()"></div></div>
+<div class="row"><div class="lbl">보내기 버튼 색상</div><div class="swatch"><input type="color" id="c-hdr" value="#EFBD16" oninput="render()"></div></div>
       <div class="irow">
         <div class="ilbl">채팅방 배경 이미지</div>
         <label class="upbtn" id="ub-chatbg">이미지 선택<input type="file" accept="image/*" onchange="up(this,'chatbg')"></label>
@@ -377,12 +378,16 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 
       <!-- 채팅 -->
       <div class="pscreen on" id="pv-chat">
-        <div id="pv-sbar" class="p-sbar" style="background:transparent !important; position:relative; z-index:10;"><span>9:41</span><span style="display:flex;align-items:center;gap:3px"><svg width="14" height="11" viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="currentColor" opacity=".5"/></svg></span></div>
-        <div id="pv-chdr" class="p-chdr" style="background:transparent !important; position:relative; z-index:10;">
-          <span class="p-chdr-back">‹</span>
-          <div class="p-chdr-title">채팅방</div>
-          <div class="p-chdr-icons">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div id="pv-sbar" class="p-sbar" style="background:transparent !important; position:relative; z-index:10;">
+            <span>9:41</span>
+            <span style="display:flex;align-items:center;gap:3px"><svg width="14" height="11" viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="currentColor" opacity=".5"/></svg></span>
+          </div>
+          
+          <div id="pv-chdr" class="p-chdr" style="background:transparent !important; position:relative; z-index:10;">
+            <span class="p-chdr-back">‹</span>
+            <div class="p-chdr-title">채팅방</div>
+            <div class="p-chdr-icons">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </div>
         </div>
@@ -993,6 +998,7 @@ function setImg(id, key) {
 }
 
 function render() {
+  setStyle('pv-send-btn', 'color', g('c-hdr'));
   const hdr   = g('c-hdr')   || '#EFBD16';
   const chatbg= g('c-chatbg')|| '#B2C7D9';
   const meTxt = g('c-me-txt')|| '#1a1a1a';
@@ -1010,8 +1016,7 @@ function render() {
   if (preview) preview.style.background = '';
 
   // 헤더
-  setStyle('pv-sbar','background', hdr);
-  setStyle('pv-chdr','background', hdr);
+
   setStyle('pv-lock-sbar','background', lock);
 
   // 13. unread 뱃지 - 배경 없이 글씨색만
