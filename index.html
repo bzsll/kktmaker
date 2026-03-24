@@ -92,24 +92,24 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 .p-titem .cico{position:absolute;top:0;width:17px;height:17px;object-fit:contain;display:none}
 .p-titem .cico.on{display:block}
 .p-titem svg.hide{opacity:0}
-.p-fhdr{padding:24px 12px 5px;display:flex;justify-content:space-between;align-items:center;background:#fff}
+.p-fhdr{padding:24px 12px 5px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.85)}
 .p-fhdr-t{font-size:16px;font-weight:800}
 .p-fhdr-icons{display:flex;gap:10px;font-size:16px}
-.p-myprof{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:4px solid #f0f0f0;background:#fff}
+.p-myprof{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:4px solid rgba(240,240,240,0.5);background:rgba(255,255,255,0.82)}
 .p-myav{width:40px;height:40px;border-radius:12px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px;background:#ddd;position:relative}
 .p-myav img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
 .p-myav img.on{display:block}
 .p-myname{font-size:12px;font-weight:700}
 .p-mystatus{font-size:10px;color:#aaa;margin-top:1px}
-.p-fsec{padding:6px 12px 2px;font-size:9px;color:#aaa;font-weight:600;background:#fff}
-.p-fitems{flex:1;background:#fff}
+.p-fsec{padding:6px 12px 2px;font-size:9px;color:#aaa;font-weight:600;background:rgba(255,255,255,0.7)}
+.p-fitems{flex:1;background:rgba(255,255,255,0.7)}
 .p-fitem{display:flex;align-items:center;padding:5px 12px;gap:8px}
 .p-fav{width:35px;height:35px;border-radius:10px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:17px;background:#ddd;position:relative}
 .p-fav img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
 .p-fav img.on{display:block}
 .p-fname{font-size:11px;font-weight:500}
 .p-fstatus{font-size:9px;color:#aaa}
-.p-fill{flex:1;background:#fff}
+.p-fill{flex:1;background:transparent}
 .p-lock{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;padding-top:60px;gap:12px;flex:1;background:#1a1a2e}
 .p-lock-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0}
 .p-lock-bg.on{opacity:1}
@@ -133,12 +133,11 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     <div style="font-size:11px;font-weight:400;color:rgba(254,229,0,.8);margin-top:2px">@bzsll 제작</div>
   </div>
   <button class="hdr-btn" onclick="generate()">💭 .ktheme 생성</button>
-  <button class="hdr-btn" style="background:#2e2e3e;color:#aaa;margin-left:6px;font-size:11px" onclick="(() => { const css = buildCSS(); const w = window.open(); w.document.write('<pre>' + css.replace(/</g,'&lt;') + '</pre>'); })()">CSS 확인</button>
 </div>
 <div class="main">
 <div class="panel">
 
-  <!-- 테마 정보 -->
+  
   <div class="sec open" id="s0">
     <div class="sec-hd" onclick="tog('s0')"><span class="t">테마 정보</span><span class="v">▼</span></div>
     <div class="sec-body">
@@ -154,11 +153,11 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     </div>
   </div>
 
-  <!-- 채팅방 -->
+  
   <div class="sec open" id="s1">
     <div class="sec-hd" onclick="tog('s1')"><span class="t">채팅방</span><span class="v">▼</span></div>
     <div class="sec-body">
-      <div class="row"><div class="lbl">헤더 / 보내기버튼 색상</div><div class="swatch"><input type="color" id="c-hdr" value="#EFBD16" oninput="render()"></div></div>
+      <div class="row"><div class="lbl">보내기버튼 색상</div><div class="swatch"><input type="color" id="c-hdr" value="#EFBD16" oninput="render()"></div></div>
       <div class="row"><div class="lbl">채팅 배경색</div><div class="swatch"><input type="color" id="c-chatbg" value="#B2C7D9" oninput="render()"></div></div>
       <div class="irow">
         <div class="ilbl">채팅방 배경 이미지</div>
@@ -168,15 +167,14 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     </div>
   </div>
 
-  <!-- 말풍선 -->
+  
   <div class="sec open" id="s2">
     <div class="sec-hd" onclick="tog('s2')"><span class="t">말풍선</span><span class="v">▼</span></div>
     <div class="sec-body">
       <div class="row"><div class="lbl">내 말풍선 텍스트색</div><div class="swatch"><input type="color" id="c-me-txt" value="#1a1a1a" oninput="render()"></div></div>
       <div class="row"><div class="lbl">안 읽음 표시 색상</div><div class="swatch"><input type="color" id="c-unread" value="#3c1e1e" oninput="render()"></div></div>
 
-
-      <!-- 내 말풍선 이미지 -->
+      
       <div style="background:#22222c;border-radius:8px;padding:8px;margin-top:6px">
         <div style="font-size:10px;color:#aaa;font-weight:700;margin-bottom:5px">내 말풍선 (기본)</div>
         <div class="irow" style="padding-top:0;border:none">
@@ -210,7 +208,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         </div>
               </div>
 
-      <!-- 상대 말풍선 이미지 -->
+      
       <div style="background:#22222c;border-radius:8px;padding:8px;margin-top:8px">
         <div style="font-size:10px;color:#aaa;font-weight:700;margin-bottom:5px">상대 말풍선 (기본)</div>
         <div class="row" style="margin-bottom:4px"><div class="lbl">상대 말풍선 텍스트색</div><div class="swatch"><input type="color" id="c-them-txt" value="#1a1a1a" oninput="render()"></div></div>
@@ -247,7 +245,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     </div>
   </div>
 
-  <!-- 입력창 -->
+  
   <div class="sec" id="s3">
     <div class="sec-hd" onclick="tog('s3')"><span class="t">입력창</span><span class="v">▼</span></div>
     <div class="sec-body">
@@ -257,7 +255,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     </div>
   </div>
 
-  <!-- 탭바 -->
+  
   <div class="sec open" id="s4">
     <div class="sec-hd" onclick="tog('s4')"><span class="t">하단 탭바</span><span class="v">▼</span></div>
     <div class="sec-body">
@@ -271,7 +269,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     </div>
   </div>
 
-  <!-- 프로필 & 친구추가 -->
+  
   <div class="sec open" id="s5">
     <div class="sec-hd" onclick="tog('s5')"><span class="t">프로필 & 친구추가</span><span class="v">▼</span></div>
     <div class="sec-body">
@@ -283,7 +281,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     </div>
   </div>
 
-  <!-- 친구목록 / 메인배경 -->
+  
   <div class="sec" id="s6">
     <div class="sec-hd" onclick="tog('s6')"><span class="t">친구목록 / 메인배경</span><span class="v">▼</span></div>
     <div class="sec-body">
@@ -297,7 +295,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     </div>
   </div>
 
-  <!-- 잠금화면 -->
+  
   <div class="sec" id="s7">
     <div class="sec-hd" onclick="tog('s7')"><span class="t">잠금화면</span><span class="v">▼</span></div>
     <div class="sec-body">
@@ -353,7 +351,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     </div>
   </div>
 
-  <!-- 알림/배너 -->
+  
   <div class="sec" id="s8">
     <div class="sec-hd" onclick="tog('s8')"><span class="t">알림 / 배너</span><span class="v">▼</span></div>
     <div class="sec-body">
@@ -365,7 +363,6 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 
 </div>
 
-<!-- 미리보기 -->
 <div class="preview">
   <div class="ptabs">
     <button class="ptab on" onclick="sw('chat',this)">채팅방</button>
@@ -377,7 +374,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     <div class="notch"></div>
     <div class="screen">
 
-      <!-- 채팅 -->
+      
       <div class="pscreen on" id="pv-chat">
         <div id="pv-sbar" class="p-sbar"><span>9:41</span><span style="display:flex;align-items:center;gap:3px"><svg width="14" height="11" viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="currentColor" opacity=".5"/></svg></span></div>
         <div id="pv-chdr" class="p-chdr">
@@ -393,7 +390,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
           <div class="p-chatbg-img" id="pv-chatbg-img"></div>
           <div class="p-msgs">
             <div class="p-date">오늘</div>
-            <!-- 상대 기본 -->
+            
             <div class="p-mrow">
               <div class="p-av" id="pv-av1"><img id="pv-av1-img"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
               <div class="p-mcol">
@@ -404,7 +401,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
                 </div>
               </div>
             </div>
-            <!-- 상대 연속 -->
+            
             <div class="p-mrow" style="margin-top:-3px">
               <div style="width:28px;flex-shrink:0"></div>
               <div class="p-mcol">
@@ -414,7 +411,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
                 </div>
               </div>
             </div>
-            <!-- 내 기본 -->
+            
             <div class="p-mrow me">
               <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px">
                 <span id="pv-unread-badge" style="font-size:9px;font-weight:700;color:#3c1e1e;min-width:14px;text-align:center">1</span>
@@ -422,12 +419,12 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
               </div>
               <div class="p-bbl me" id="pv-bbl-me1"><div class="p-bbl-bg" id="pv-bbl-me1-bg"></div><span class="p-bbl-txt">내 말풍선 (기본)</span></div>
             </div>
-            <!-- 내 연속 -->
+            
             <div class="p-mrow me" style="margin-top:-3px">
               <span class="p-mtime">9:43</span>
               <div class="p-bbl me" id="pv-bbl-me-cont"><div class="p-bbl-bg" id="pv-bbl-me-cont-bg"></div><span class="p-bbl-txt">내 말풍선 (연속)</span></div>
             </div>
-            <!-- 내 긴 말풍선 -->
+            
             <div class="p-mrow me" style="margin-top:-3px">
               <span class="p-mtime">9:44</span>
               <div class="p-bbl me" id="pv-bbl-me-long" style="max-width:75%"><div class="p-bbl-bg" id="pv-bbl-me-long-bg"></div><span class="p-bbl-txt">내 말풍선 (기본) — 길게 쓸 때</span></div>
@@ -437,9 +434,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         <div class="p-inbar" id="pv-inbar">
           <svg id="pv-menu-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
           <div class="p-inbox" id="pv-inbox">메시지 입력</div>
-          <div id="pv-send-btn" style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </div>
+          <div id="pv-send-btn" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;font-size:20px;line-height:1">↑</div>
         </div>
         <div class="p-tbar" id="pv-tbar">
           <div class="p-tbar-bg" id="pv-tbar-bg"></div>
@@ -451,7 +446,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         </div>
       </div>
 
-      <!-- 친구목록 -->
+      
       <div class="pscreen" id="pv-friend">
         <div class="p-fhdr" id="pv-fhdr">
           <div class="p-fhdr-t">친구</div>
@@ -482,13 +477,13 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         </div>
       </div>
 
-      <!-- 잠금 -->
+      
       <div class="pscreen" id="pv-lock">
         <div class="p-sbar" id="pv-lock-sbar" style="color:#fff"><span>9:41</span><span style="display:flex;align-items:center;gap:3px"><svg width="11" height="11" viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="currentColor" opacity=".6"/></svg></span></div>
         <div class="p-lock" id="pv-lock-screen" style="flex:1;display:flex;flex-direction:column">
           <div class="p-lock-bg" id="pv-lock-bg"></div>
           <div class="p-lock-content" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">
-            <!-- 안내 문구 -->
+            
             <div id="pv-lock-msg" style="font-size:10px;font-weight:600;margin-bottom:16px;color:#000000">비밀번호를 입력하세요</div>
             <div class="p-lock-dots">
               <div class="p-lock-dot" id="pv-pin1"><img id="pv-pin1-img"></div>
@@ -497,7 +492,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
               <div class="p-lock-dot" id="pv-pin4"><img id="pv-pin4-img"></div>
             </div>
           </div>
-          <!-- 키패드 배경 영역 -->
+          
           <div id="pv-keypad-bg" style="background:#f0f0f0;padding:12px 16px 16px">
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:160px;margin:0 auto">
               <div class="p-keypad-btn" id="pv-kp1">1</div>
@@ -517,9 +512,9 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
         </div>
       </div>
 
-      <!-- 알림 -->
-      <div class="pscreen" id="pv-notif">
-        <div class="p-sbar" style="background:#f0f0f0;color:#333"><span>9:41</span><span style="display:flex;align-items:center;gap:3px"><svg width="11" height="11" viewBox="0 0 24 18" fill="none" stroke="#333" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="#333" opacity=".5"/></svg></span></div>
+      
+      <div class="pscreen" id="pv-notif" style="background:#e8e8ee">
+        <div class="p-sbar" style="background:transparent;color:#333"><span>9:41</span><span style="display:flex;align-items:center;gap:3px"><svg width="11" height="11" viewBox="0 0 24 18" fill="none" stroke="#333" stroke-width="2"><rect x="2" y="3" width="18" height="12" rx="2"/><path d="M22 7h1v4h-1" stroke-width="2.5"/><rect x="3" y="4" width="14" height="10" rx="1" fill="#333" opacity=".5"/></svg></span></div>
         <div id="pv-notif-bar" style="margin:8px;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)">
           <div style="width:32px;height:32px;border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#ddd;position:relative">
             <img id="pv-notif-av-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none">
@@ -530,22 +525,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
             <div style="font-size:10px;opacity:.8;margin-top:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" id="pv-notif-msg">알림 메세지입니다</div>
           </div>
         </div>
-        <div id="pv-share-bar" style="margin:0 8px;border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,.1)">
-          <div style="font-size:10px;flex:1" id="pv-share-name">전달완료 배너입니다</div>
-          <div style="font-size:9px;opacity:.6">방금</div>
-        </div>
-        <div style="flex:1;background:#f5f5f5"></div>
-        <div style="position:relative">
-          <div id="pv-banner" style="padding:10px 14px;display:flex;align-items:center;gap:8px">
-            <div style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </div>
-            <div>
-              <div style="font-size:10px;font-weight:700;color:#fff">카카오톡</div>
-              <div style="font-size:9px;color:rgba(255,255,255,.7)">새 메세지가 있습니다</div>
-            </div>
-          </div>
-        </div>
+        <div style="flex:1;background:transparent"></div>
       </div>
 
     </div>
@@ -554,7 +534,6 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 </div>
 <div class="toast" id="toast"></div>
 
-<!-- 인셋 에디터 팝업 -->
 <div id="inset-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center">
   <div style="background:#18181f;border-radius:16px;padding:20px;width:min(92vw,620px);max-height:92vh;overflow-y:auto;border:1px solid #2e2e3e">
     <div style="display:flex;align-items:center;margin-bottom:14px">
@@ -562,13 +541,13 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
       <button onclick="closeInsetEditor()" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;padding:2px 6px">✕</button>
     </div>
 
-    <!-- 탭 -->
+    
     <div style="display:flex;gap:6px;margin-bottom:14px">
       <button class="ie-tab on" id="ie-tab-bg" onclick="switchIeTab('bg')">말풍선 위치</button>
       <button class="ie-tab" id="ie-tab-edge" onclick="switchIeTab('edge')">텍스트 위치</button>
     </div>
 
-    <!-- 설명 -->
+    
     <div id="ie-desc-bg" style="font-size:11px;color:#888;margin-bottom:10px;line-height:1.5">
       <span style="color:#4a9eff">■</span> 파란 선 = 말풍선이 늘어나는 기준선<br>
       선을 드래그해서 <b style="color:#fff">말풍선 위치를 설정하세요</b>
@@ -578,12 +557,12 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
       선을 드래그해서 <b style="color:#fff">텍스트 위치를 설정하세요</b>
     </div>
 
-    <!-- 캔버스 -->
+    
     <div style="position:relative;overflow:hidden;border-radius:10px;background:#111;display:flex;align-items:center;justify-content:center;min-height:200px" id="ie-canvas-wrap">
       <canvas id="ie-canvas" style="max-width:100%;cursor:crosshair;touch-action:none"></canvas>
     </div>
 
-    <!-- 버튼 -->
+    
     <div style="display:flex;gap:8px;margin-top:14px">
       <button onclick="closeInsetEditor()" style="flex:1;background:#22222c;border:1px solid #2e2e3e;border-radius:10px;padding:10px;color:#aaa;font-family:inherit;font-size:13px;cursor:pointer">취소</button>
       <button onclick="applyInset()" style="flex:2;background:#FEE500;border:none;border-radius:10px;padding:10px;color:#1a1600;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">적용</button>
@@ -602,7 +581,6 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
 <script>
 const I = {};
 
-// 탭 아이콘 목록 (리락쿠마 CSS 기반)
 const TABICONS = [
   {k:'friend', label:'친구',         fn:['maintabIcoFriends','maintabIcoFriendsSelected']},
   {k:'chat',   label:'채팅',         fn:['maintabIcoChats','maintabIcoChatsSelected']},
@@ -611,7 +589,6 @@ const TABICONS = [
   {k:'more',   label:'더보기',        fn:['maintabIcoMore','maintabIcoMoreSelected']},
 ];
 
-// 말풍선 유형별 값
 const BBL_TYPES = {
   basic: {
     s1: '26 24', s2: '26 24', s_edge: '14px 20px 8px 26px', s_edge2: '14px 20px 8px 26px',
@@ -632,7 +609,6 @@ const BBL_TYPES = {
 };
 
 function applyBblType() {
-  // 선택만 저장, CSS 생성 시 buildCSS에서 읽음
   render();
 }
 
@@ -641,19 +617,16 @@ function getBblVal(side, key) {
   return (BBL_TYPES[type] || BBL_TYPES.basic)[key] || '';
 }
 
-// ── 인셋 에디터 ──
-let ieKey = null;      // 현재 편집 중인 말풍선 키
-let ieTab = 'bg';      // 'bg' | 'edge'
-let ieImg = null;      // 원본 이미지 (Image 객체)
-let ieScale = 1;       // 표시 스케일 (캔버스px / 원본px)
-let ieDragging = null; // 현재 드래그 중인 선 id
+let ieKey = null;
+let ieTab = 'bg';
+let ieImg = null;
+let ieScale = 1;
+let ieDragging = null;
 
-// 인셋 값 저장소 (키 → {bgH, bgV, et, el, eb, er})
 const INSET = {};
 
 function getInset(key) {
   if (INSET[key]) return INSET[key];
-  // 이미지 크기 기반 기본값 (이미지 20% 정도)
   const img = I[key];
   if (img) {
     const el = new Image();
@@ -677,20 +650,17 @@ function openInsetEditor(key) {
   const modal = document.getElementById('inset-modal');
   modal.style.display = 'flex';
 
-  // 제목
   const names = {
     'bbl-s1':'내 말풍선 (기본)', 'bbl-s2':'내 말풍선 (연속)',
     'bbl-r1':'상대 말풍선 (기본)', 'bbl-r2':'상대 말풍선 (연속)',
   };
   document.getElementById('ie-title').textContent = (names[key]||key) + ' 설정';
 
-  // 탭 초기화
   document.getElementById('ie-tab-bg').classList.add('on');
   document.getElementById('ie-tab-edge').classList.remove('on');
   document.getElementById('ie-desc-bg').style.display = '';
   document.getElementById('ie-desc-edge').style.display = 'none';
 
-  // 이미지 로드 후 캔버스 초기화
   ieImg = new Image();
   ieImg.onload = () => initCanvas();
   ieImg.src = I[key].url;
@@ -720,7 +690,6 @@ function initCanvas() {
   canvas.width  = Math.round(ieImg.naturalWidth  * ieScale);
   canvas.height = Math.round(ieImg.naturalHeight * ieScale);
 
-  // 저장된 값 없으면 기본값 초기화
   if (!INSET[ieKey]) INSET[ieKey] = getInset(ieKey);
 
   drawCanvas();
@@ -741,25 +710,22 @@ function drawCanvas() {
   ctx.drawImage(ieImg, 0, 0, W, H);
 
   if (ieTab === 'bg') {
-    // 배경 인셋 - 선 4개 각각 독립
-    const lL = toCanvas(v.bgL);  // 왼쪽 세로선
-    const lR = toCanvas(v.bgR);  // 오른쪽 세로선 (오른쪽에서)
-    const lT = toCanvas(v.bgT);  // 위 가로선
-    const lB = toCanvas(v.bgB);  // 아래 가로선 (아래에서)
+    const lL = toCanvas(v.bgL);
+    const lR = toCanvas(v.bgR);
+    const lT = toCanvas(v.bgT);
+    const lB = toCanvas(v.bgB);
 
-    // 반투명 늘어나는 영역
     ctx.fillStyle = 'rgba(74,158,255,0.18)';
     ctx.fillRect(lL, lT, W-lL-lR, H-lT-lB);
 
     ctx.strokeStyle = '#4a9eff'; ctx.lineWidth = 2.5;
     ctx.setLineDash([6,3]);
-    ctx.beginPath(); ctx.moveTo(lL,   0); ctx.lineTo(lL,   H); ctx.stroke(); // 왼
-    ctx.beginPath(); ctx.moveTo(W-lR, 0); ctx.lineTo(W-lR, H); ctx.stroke(); // 오른
-    ctx.beginPath(); ctx.moveTo(0, lT);   ctx.lineTo(W, lT);   ctx.stroke(); // 위
-    ctx.beginPath(); ctx.moveTo(0, H-lB); ctx.lineTo(W, H-lB); ctx.stroke(); // 아래
+    ctx.beginPath(); ctx.moveTo(lL,   0); ctx.lineTo(lL,   H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W-lR, 0); ctx.lineTo(W-lR, H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, lT);   ctx.lineTo(W, lT);   ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, H-lB); ctx.lineTo(W, H-lB); ctx.stroke();
     ctx.setLineDash([]);
 
-    // 값 레이블
     ctx.fillStyle = '#4a9effcc'; ctx.font = 'bold 11px sans-serif';
     ctx.fillText(v.bgL+'px', lL+3, 14);
     ctx.fillText(v.bgR+'px', W-lR+3, 14);
@@ -895,9 +861,8 @@ function applyInset() {
 function getBblInsetVal(key, type) {
   if (!INSET[key]) return null;
   const v = INSET[key];
-  const scale = (I[key] && I[key].scale) || 3; // 기본 3x 가정
+  const scale = (I[key] && I[key].scale) || 3;
   const s = scale;
-  // 원본px ÷ scale = 1x CSS값
   const bgL = Math.round(v.bgL / s), bgR = Math.round(v.bgR / s);
   const bgT = Math.round(v.bgT / s), bgB = Math.round(v.bgB / s);
   const et = Math.round(v.et / s), el = Math.round(v.el / s);
@@ -932,10 +897,8 @@ function buildTabIconUI() {
 }
 
 function detectScale(filename, w, h) {
-  // 파일명에 @2x, @3x 포함 시 우선
   if (/@3x/i.test(filename)) return 3;
   if (/@2x/i.test(filename)) return 2;
-  // 카카오 기준: 말풍선 표준 1x 크기 ~50x40px 이하면 1x, 그 이상은 비율로 판단
   if (w <= 80 && h <= 120)  return 1;
   if (w <= 160 && h <= 240) return 2;
   return 3;
@@ -947,7 +910,6 @@ function up(input, key) {
   const reader = new FileReader();
   reader.onload = e => {
     const url = e.target.result;
-    // 이미지 크기 로드 후 배율 저장
     const tmpImg = new Image();
     tmpImg.onload = () => {
       const scale = detectScale(file.name, tmpImg.naturalWidth, tmpImg.naturalHeight);
@@ -958,7 +920,6 @@ function up(input, key) {
       if (th) { th.src = url; th.classList.add('show'); }
       if (db) db.classList.add('show');
       if (ub) ub.classList.add('has');
-      // 배율 표시
       const disp = document.getElementById('inset-display-' + key);
       if (disp) {
         disp.style.display = 'block';
@@ -1015,31 +976,25 @@ function render() {
   const fbg   = g('c-fbg')   || '#ffffff';
   const fname = g('c-fname') || '#111111';
   const lock  = g('c-lock')  || '#1a1a2e';
-  const meBbl  = '#FEE500';   // 내 말풍선 기본 배경색
-  const themBbl= '#ffffff';   // 상대 말풍선 기본 배경색
+  const meBbl  = '#FEE500';
+  const themBbl= '#ffffff';
 
-  // 미리보기 배경 원래대로
   const preview = document.querySelector('.preview');
   if (preview) preview.style.background = '';
 
-  // 헤더
   setStyle('pv-sbar','background', hdr);
   setStyle('pv-chdr','background', hdr);
   setStyle('pv-lock-sbar','background', lock);
 
-  // 13. unread 뱃지 - 배경 없이 글씨색만
   const unreadEl = document.getElementById('pv-unread-badge');
   if (unreadEl) unreadEl.style.color = g('c-unread') || '#3c1e1e';
 
-  // 채팅 배경
   setStyle('pv-chatbg-color','background', chatbg);
   setBg('pv-chatbg-img', 'chatbg');
 
-  // 말풍선 텍스트
   ['pv-bbl-me1','pv-bbl-me-cont','pv-bbl-me-long'].forEach(id => setStyle(id,'color', meTxt));
   ['pv-bbl-them1','pv-bbl-them-cont'].forEach(id => setStyle(id,'color', thTxt));
 
-  // 말풍선 이미지 + 9-slice canvas 렌더링
   const bblMap = [
     { wrapId:'pv-bbl-me1',       imgKey:'bbl-s1' },
     { wrapId:'pv-bbl-me-cont',   imgKey:'bbl-s2' },
@@ -1064,7 +1019,6 @@ function render() {
       const eb  = Math.round(iv.eb  / sc);
       const el  = Math.round(iv.el  / sc);
 
-      // 엣지인셋 → padding (텍스트 위치)
       wrap.style.padding  = `${et}px ${er}px ${eb}px ${el}px`;
       wrap.style.background   = 'none';
       wrap.style.borderRadius = '0';
@@ -1073,7 +1027,6 @@ function render() {
       wrap.style.boxShadow    = 'none';
       wrap.style.color = wrap.classList.contains('me') ? meTxt : thTxt;
 
-      // canvas로 9-slice 배경 그리기
       const drawBubble = () => {
         const W = wrap.offsetWidth  || 80;
         const H = wrap.offsetHeight || 40;
@@ -1093,25 +1046,19 @@ function render() {
         const img = new Image();
         img.onload = () => {
           const iw = img.naturalWidth, ih = img.naturalHeight;
-          // 9 슬라이스 좌표 (원본 이미지 기준 - 배경인셋을 원본px로)
           const sl = iv.bgL, sr = iv.bgR, st = iv.bgT, sb = iv.bgB;
-          // 캔버스 기준 slice
           const dl = bgL, dr = bgR, dt = bgT, db = bgB;
 
           const pieces = [
-            // [srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH]
-            // 모서리 4개 (고정)
-            [0,       0,       sl,          st,          0,    0,    dl,    dt   ], // 좌상
-            [iw-sr,   0,       sr,          st,          W-dr, 0,    dr,    dt   ], // 우상
-            [0,       ih-sb,   sl,          sb,          0,    H-db, dl,    db   ], // 좌하
-            [iw-sr,   ih-sb,   sr,          sb,          W-dr, H-db, dr,    db   ], // 우하
-            // 변 4개 (늘어남)
-            [sl,      0,       iw-sl-sr,    st,          dl,   0,    W-dl-dr, dt   ], // 상
-            [sl,      ih-sb,   iw-sl-sr,    sb,          dl,   H-db, W-dl-dr, db   ], // 하
-            [0,       st,      sl,          ih-st-sb,    0,    dt,   dl,    H-dt-db], // 좌
-            [iw-sr,   st,      sr,          ih-st-sb,    W-dr, dt,   dr,    H-dt-db], // 우
-            // 중앙 (늘어남)
-            [sl,      st,      iw-sl-sr,    ih-st-sb,    dl,   dt,   W-dl-dr, H-dt-db], // 중
+            [0,       0,       sl,          st,          0,    0,    dl,    dt   ],
+            [iw-sr,   0,       sr,          st,          W-dr, 0,    dr,    dt   ],
+            [0,       ih-sb,   sl,          sb,          0,    H-db, dl,    db   ],
+            [iw-sr,   ih-sb,   sr,          sb,          W-dr, H-db, dr,    db   ],
+            [sl,      0,       iw-sl-sr,    st,          dl,   0,    W-dl-dr, dt   ],
+            [sl,      ih-sb,   iw-sl-sr,    sb,          dl,   H-db, W-dl-dr, db   ],
+            [0,       st,      sl,          ih-st-sb,    0,    dt,   dl,    H-dt-db],
+            [iw-sr,   st,      sr,          ih-st-sb,    W-dr, dt,   dr,    H-dt-db],
+            [sl,      st,      iw-sl-sr,    ih-st-sb,    dl,   dt,   W-dl-dr, H-dt-db],
           ];
           pieces.forEach(([sx,sy,sw,sh,dx,dy,dw,dh]) => {
             if (sw>0 && sh>0 && dw>0 && dh>0)
@@ -1121,7 +1068,6 @@ function render() {
         img.src = imgData.url;
       };
 
-      // 크기 변화 감지해서 재그리기
       if (wrap._sliceObs) wrap._sliceObs.disconnect();
       const obs = new ResizeObserver(() => drawBubble());
       obs.observe(wrap);
@@ -1129,7 +1075,6 @@ function render() {
       setTimeout(drawBubble, 0);
 
     } else {
-      // canvas 제거
       if (wrap._sliceCanvas) { wrap._sliceCanvas.remove(); wrap._sliceCanvas = null; }
       if (wrap._sliceObs)    { wrap._sliceObs.disconnect(); wrap._sliceObs = null; }
       if (imgData && imgData.url) {
@@ -1148,24 +1093,19 @@ function render() {
     }
   });
 
-  // 입력창
   setStyle('pv-inbar','background', inbar);
   setStyle('pv-inbox','color', g('c-intxt') || '#191919');
-  // 메뉴 아이콘색
   const ticoVal = g('c-tico') || '#aaaaaa';
   const pvMenuIco = document.getElementById('pv-menu-ico');
   if (pvMenuIco) pvMenuIco.style.stroke = ticoVal;
-  // 보내기버튼색
   const pvSendBtn = document.getElementById('pv-send-btn');
-  if (pvSendBtn) pvSendBtn.style.background = hdr;
+  if (pvSendBtn) { pvSendBtn.style.color = hdr; pvSendBtn.style.background = 'transparent'; }
 
-  // 탭바
   setStyle('pv-tbar','background', tbar);
   setStyle('pv-tbar-f','background', tbar);
   setBg('pv-tbar-bg', 'tbar');
   setBg('pv-tbar-bg-f', 'tbar');
 
-  // 탭 아이콘
   TABICONS.forEach(t => {
     ['c','f'].forEach(s => {
       const el  = document.getElementById('pti-' + t.k + '-' + s);
@@ -1176,43 +1116,36 @@ function render() {
       if (url) { ico.src = url; ico.classList.add('on'); svg.classList.add('hide'); }
       else {
         ico.classList.remove('on'); svg.classList.remove('hide');
-        // 탭바 아이콘 색상 적용
         el.style.color = tbar === '#f0f0f0' || tbar === '#ffffff' ? '#888' : '#fff';
       }
     });
   });
 
-  // 친구목록 아이콘 검은색
   const fhdr = document.getElementById('pv-fhdr');
   if (fhdr) { fhdr.style.color = '#111'; }
   setStyle('pv-fhdr', 'background', fbg);
 
-  // 프로필
   ['pv-av1-img','pv-myav-img',
    'pv-fav1-img','pv-fav2-img','pv-fav3-img',
    'pv-notif-av-img'].forEach(id => setImg(id, 'prof'));
 
-  // 친구목록
-  ['pv-myprof','pv-fsec','pv-fitems','pv-ffill'].forEach(id => setStyle(id,'background', fbg));
-  ['pv-fn1','pv-fn2','pv-fn3','pv-myname'].forEach(id => setStyle(id,'color', fname));
-  // 친구목록 배경이미지
   const mainbgUrl = u('mainbg');
-  const friendScreens = ['pv-myprof','pv-fsec','pv-fitems','pv-ffill','pv-fhdr'];
   if (mainbgUrl) {
     const pvFriend = document.getElementById('pv-friend');
-    if (pvFriend) pvFriend.style.backgroundImage = `url(${mainbgUrl})`;
-    if (pvFriend) pvFriend.style.backgroundSize = 'cover';
+    if (pvFriend) { pvFriend.style.backgroundImage = `url(${mainbgUrl})`; pvFriend.style.backgroundSize = 'cover'; pvFriend.style.backgroundPosition = 'center'; }
+    ['pv-myprof','pv-fsec','pv-fitems'].forEach(id => setStyle(id,'background','rgba(255,255,255,0.75)'));
+    setStyle('pv-ffill','background','transparent');
+    setStyle('pv-fhdr','background','rgba(255,255,255,0.85)');
   } else {
     const pvFriend = document.getElementById('pv-friend');
     if (pvFriend) pvFriend.style.backgroundImage = '';
+    ['pv-myprof','pv-fsec','pv-fitems','pv-ffill','pv-fhdr'].forEach(id => setStyle(id,'background', fbg));
   }
-  // 보조 텍스트색 = fname에 투명도 60% (상태메시지, 마지막메시지)
+  ['pv-fn1','pv-fn2','pv-fn3','pv-myname'].forEach(id => setStyle(id,'color', fname));
   const fnameSubtle = fname + '99';
   document.querySelectorAll('.p-fstatus, .p-mystatus').forEach(el => el.style.color = fnameSubtle);
 
-  // 잠금
   setStyle('pv-lock-screen','background', lock);
-  // 배경이미지는 p-lock-content 위에만 (키패드 영역 제외)
   const lockbgUrl = u('lockbg');
   const lockContent = document.getElementById('pv-lock-screen');
   if (lockContent) {
@@ -1224,7 +1157,6 @@ function render() {
       lockContent.style.backgroundImage = '';
     }
   }
-  // 키패드 배경은 항상 별도로 유지
   const locktxt  = g('c-lock-txt')   || '#000000';
   const kptxt    = g('c-keypad-txt') || '#000000';
   const kpbg     = g('c-keypad-bg')  || '#f0f0f0';
@@ -1232,12 +1164,10 @@ function render() {
   setStyle('pv-keypad-bg', 'background', kpbg);
   document.querySelectorAll('.p-keypad-btn').forEach(el => el.style.color = kptxt);
 
-  // 핀 이미지 반영
   ['pv-pin1','pv-pin2','pv-pin3','pv-pin4'].forEach((id, i) => {
     const e = document.getElementById(id);
     if (!e) return;
     const img = e.querySelector('img');
-    // pin1,2: 입력됨(on) / pin3,4: 미입력(off) 으로 미리보기
     const onUrl  = u(['pin1on','pin2on','pin3on','pin4on'][i]);
     const offUrl = u(['pin1off','pin2off','pin3off','pin4off'][i]);
     const showUrl = i < 2 ? (onUrl || offUrl) : (offUrl || onUrl);
@@ -1252,18 +1182,12 @@ function render() {
     }
   });
 
-  // 알림바
   const notif     = g('c-notif')     || '#ffffff';
   const notifName = g('c-notif-name')|| '#333333';
   const notifMsg  = g('c-notif-msg') || '#666666';
-  const share     = g('c-share')     || '#ffffff';
-  const banner    = g('c-banner')    || '#333333';
   setStyle('pv-notif-bar','background', notif);
   setStyle('pv-notif-name','color', notifName);
   setStyle('pv-notif-msg','color', notifMsg);
-  setStyle('pv-share-bar','background', share);
-  setStyle('pv-share-name','color', notifName);
-  setStyle('pv-banner','background', banner);
 }
 
 function sw(tab, btn) {
@@ -1275,7 +1199,6 @@ function sw(tab, btn) {
 
 function tog(id) { document.getElementById(id).classList.toggle('open'); }
 
-// CSS 생성 - 리락쿠마 CSS 구조 100% 동일
 function buildCSS() {
   const name  = g('m-name')  || 'MyTheme';
   const id    = g('m-id')    || 'com.myname.mytheme';
@@ -1302,7 +1225,6 @@ function buildCSS() {
   const share = g('c-share') || '#ffffff';
   const banner= g('c-banner')|| '#333333';
 
-  // 탭 아이콘 fn 매핑
   const TIFN = {};
   TABICONS.forEach(t => {
     TIFN[t.k+'-off'] = t.fn[0] + '.png';
@@ -1337,7 +1259,6 @@ function buildCSS() {
     'themeico': 'commonIcoTheme.png',
   };
   const allFN = {...TIFN, ...bblFN, ...otherFN};
-  // 이미지 경로: 업로드된 것만 파일명 반환, 없으면 빈 문자열
   const img = (key) => I[key] ? (allFN[key] || '') : '';
 
   return `/*
@@ -1352,11 +1273,6 @@ ManifestStyle
     -kakaotalk-author-name: '${auth}';
     -kakaotalk-theme-id: '${id}';
 }
-
-
-/*
- TabBar Style
- */
 
 TabBarStyle-Main
 {
@@ -1375,11 +1291,6 @@ TabBarStyle-Main
     -ios-more-normal-icon-image: '${img('more-off')}';
     -ios-more-selected-icon-image: '${img('more-on')}';
 }
-
-
-/*
- MainView Style
- */
 
 HeaderStyle-Main
 {
@@ -1418,11 +1329,6 @@ SectionTitleStyle-Main
     -ios-text-alpha: 1.0;
 }
 
-
-/*
- Feature Style
- */
-
 FeatureStyle-Primary
 {
     -ios-text-color: ${fname};
@@ -1433,20 +1339,10 @@ ButtonStyle-AddFriend
     ${I['addfriend'] ? `-ios-image: '${img('addfriend')}';` : ''}
 }
 
-
-/*
- DefaultProfile Style
- */
-
 DefaultProfileStyle
 {
     ${I['prof'] ? `-ios-profile-images: '${img('prof')}';` : ''}
 }
-
-
-/*
- ChatRoom Style
- */
 
 BackgroundStyle-ChatRoom
 {
@@ -1467,11 +1363,6 @@ InputBarStyle-Chat
     -ios-button-normal-background-color: #FFFFFF;
     -ios-button-normal-background-alpha: 100;
 }
-
-
-/*
- Message Style
- */
 
 MessageCellStyle-Send
 {
@@ -1499,11 +1390,6 @@ MessageCellStyle-Receive
     -ios-unread-text-color: ${unread};
 }
 
-
-/*
- Passcode Style
- */
-
 BackgroundStyle-Passcode
 {
     background-color: ${lock};
@@ -1529,11 +1415,6 @@ PasscodeStyle
     -ios-keypad-text-normal-color: ${kptxt};
 }
 
-
-/*
- Message Notification Bar Style
- */
-
 BackgroundStyle-MessageNotificationBar
 {
     background-color: ${notif};
@@ -1548,11 +1429,6 @@ LabelStyle-MessageNotificationBarMessage
 {
     -ios-text-color: ${notifMsg};
 }
-
-
-/*
- Direct Share
- */
 
 BackgroundStyle-DirectShareBar
 {
@@ -1569,11 +1445,6 @@ LabelStyle-DirectShareBarMessage
     -ios-text-color: ${fname};
 }
 
-
-/*
- BottomBanner Style
- */
-
 BottomBannerStyle {
     background-color: ${banner};
 }
@@ -1589,7 +1460,6 @@ async function generate() {
 
     zip.file('KakaoTalkTheme.css', buildCSS());
 
-    // 파일명 맵
     const TABFN = {};
     TABICONS.forEach(t => { TABFN[t.k+'-off'] = t.fn[0]; TABFN[t.k+'-on'] = t.fn[1]; });
     const FILEMAP = {
@@ -1618,7 +1488,6 @@ async function generate() {
       'pin4on':   'passcodeImgCode04Selected',
       'keypad':   'passcodeKeypadPressed',
     };
-    // 테마 아이콘은 Images/ 폴더에 저장 (확장자 .png, 배율 없음)
     if (I['themeico']) {
       const b64ico = I['themeico'].url.split(',')[1];
       imgFolder.file('commonIcoTheme.png', b64ico, { base64: true });
@@ -1634,11 +1503,9 @@ async function generate() {
     const blob = await zip.generateAsync({ type: 'blob' });
     const name_ = name + '.ktheme';
 
-    // base64로 변환해서 data URL로 열기 - 파일앱/Safari 모두 호환
     const reader = new FileReader();
     reader.onload = function() {
       const dataUrl = reader.result;
-      // data URL을 새 탭으로 열면 iOS에서 파일 저장 가능
       const a = document.createElement('a');
       a.href = dataUrl;
       a.download = name_;
