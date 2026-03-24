@@ -1617,11 +1617,10 @@ async function generate() {
       'pin4on':   'passcodeImgCode04Selected',
       'keypad':   'passcodeKeypadPressed',
     };
-    // 테마 아이콘은 루트에 저장
+    // 테마 아이콘은 Images/ 폴더에 저장 (확장자 .png, 배율 없음)
     if (I['themeico']) {
       const b64ico = I['themeico'].url.split(',')[1];
-      zip.file('commonIcoTheme@2x.png', b64ico, { base64: true });
-      zip.file('commonIcoTheme@3x.png', b64ico, { base64: true });
+      imgFolder.file('commonIcoTheme.png', b64ico, { base64: true });
     }
 
     for (const [key, fn] of Object.entries(FILEMAP)) {
