@@ -133,6 +133,7 @@ body{font-family:'Pretendard',sans-serif;background:#0f0f14;color:#f0f0f0;min-he
     <div style="font-size:11px;font-weight:400;color:rgba(254,229,0,.8);margin-top:2px">@bzsll 제작</div>
   </div>
   <button class="hdr-btn" onclick="generate()">💭 .ktheme 생성</button>
+  <button class="hdr-btn" style="background:#2e2e3e;color:#aaa;margin-left:6px;font-size:11px" onclick="(() => { const css = buildCSS(); const w = window.open(); w.document.write('<pre>' + css.replace(/</g,'&lt;') + '</pre>'); })()">CSS 확인</button>
 </div>
 <div class="main">
 <div class="panel">
