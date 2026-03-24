@@ -1360,7 +1360,7 @@ ManifestStyle
 TabBarStyle-Main
 {
     background-color: ${tbar};
-    -ios-background-image: '${img('tbar')}';
+    ${I['tbar'] ? `-ios-background-image: '${img('tbar')}';` : ''}
     -ios-friends-normal-icon-image: '${img('friend-off')}';
     -ios-friends-selected-icon-image: '${img('friend-on')}';
     -ios-chats-normal-icon-image: '${img('chat-off')}';
@@ -1391,7 +1391,7 @@ HeaderStyle-Main
 MainViewStyle-Primary
 {
     background-color: ${fbg};
-    -ios-background-image: '${img('mainbg')}';
+    ${I['mainbg'] ? `-ios-background-image: '${img('mainbg')}';` : ''}
     -ios-text-color: ${fname};
     -ios-highlighted-text-color: ${fname};
     -ios-description-text-color: ${fname};
@@ -1429,7 +1429,7 @@ FeatureStyle-Primary
 
 ButtonStyle-AddFriend
 {
-    -ios-image: '${img('addfriend')}';
+    ${I['addfriend'] ? `-ios-image: '${img('addfriend')}';` : ''}
 }
 
 
@@ -1439,7 +1439,7 @@ ButtonStyle-AddFriend
 
 DefaultProfileStyle
 {
-    -ios-profile-images: '${img('prof')}';
+    ${I['prof'] ? `-ios-profile-images: '${img('prof')}';` : ''}
 }
 
 
@@ -1450,7 +1450,7 @@ DefaultProfileStyle
 BackgroundStyle-ChatRoom
 {
     background-color: ${chatbg};
-    -ios-background-image: '${img('chatbg')}';
+    ${I['chatbg'] ? `-ios-background-image: '${img('chatbg')}';` : ''}
 }
 
 InputBarStyle-Chat
@@ -1506,7 +1506,7 @@ MessageCellStyle-Receive
 BackgroundStyle-Passcode
 {
     background-color: ${lock};
-    -ios-background-image: '${img('lockbg')}';
+    ${I['lockbg'] ? `-ios-background-image: '${img('lockbg')}';` : ''}
 }
 
 LabelStyle-PasscodeTitle
