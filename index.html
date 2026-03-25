@@ -868,8 +868,8 @@ function getBblInsetVal(key, type) {
   const et = Math.round(v.et / s), el = Math.round(v.el / s);
   const eb = Math.round(v.eb / s), er = Math.round(v.er / s);
 
-  if (type === 'bg1' || type === 'bg2') return bgL + ' ' + bgT;
-  if (type === 'edge1' || type === 'edge2') return `${et}px ${el}px ${eb}px ${er}px`;
+  if (type === 'bg1' || type === 'bg2') return bgT + ' ' + bgL;
+  if (type === 'edge1' || type === 'edge2') return `${et}px ${er}px ${eb}px ${el}px`;
   return null;
 }
 
@@ -1047,11 +1047,10 @@ function render() {
         img.onload = () => {
           const iw = img.naturalWidth, ih = img.naturalHeight;
           const sl = iv.bgL, sr = iv.bgR, st = iv.bgT, sb = iv.bgB;
-const scaleW = W / iw, scaleH = H / ih;
-const dl = Math.round(sl * scaleW);
-const dr = Math.round(sr * scaleW);
-const dt = Math.round(st * scaleH);
-const db = Math.round(sb * scaleH);
+          const dl = Math.min(sl, Math.floor(W / 2) - 1);
+          const dr = Math.min(sr, Math.floor(W / 2) - 1);
+          const dt = Math.min(st, Math.floor(H / 2) - 1);
+          const db = Math.min(sb, Math.floor(H / 2) - 1);
 
           const pieces = [
             [0,       0,       sl,          st,          0,    0,    dl,    dt   ],
