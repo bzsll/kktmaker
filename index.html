@@ -868,8 +868,8 @@ function getBblInsetVal(key, type) {
   const et = Math.round(v.et / s), el = Math.round(v.el / s);
   const eb = Math.round(v.eb / s), er = Math.round(v.er / s);
 
-  if (type === 'bg1' || type === 'bg2') return bgT + ' ' + bgL;
-  if (type === 'edge1' || type === 'edge2') return `${et}px ${er}px ${eb}px ${el}px`;
+  if (type === 'bg1' || type === 'bg2') return bgL + ' ' + bgT;
+  if (type === 'edge1' || type === 'edge2') return `${et}px ${el}px ${eb}px ${er}px`;
   return null;
 }
 
@@ -1046,22 +1046,25 @@ function render() {
         const img = new Image();
         img.onload = () => {
           const iw = img.naturalWidth, ih = img.naturalHeight;
+          // 9 슬라이스 좌표 (원본 이미지 기준 - 배경인셋을 원본px로)
           const sl = iv.bgL, sr = iv.bgR, st = iv.bgT, sb = iv.bgB;
-          const dl = Math.min(sl, Math.floor(W / 2) - 1);
-          const dr = Math.min(sr, Math.floor(W / 2) - 1);
-          const dt = Math.min(st, Math.floor(H / 2) - 1);
-          const db = Math.min(sb, Math.floor(H / 2) - 1);
+          // 캔버스 기준 slice
+          const dl = bgL, dr = bgR, dt = bgT, db = bgB;
 
           const pieces = [
-            [0,       0,       sl,          st,          0,    0,    dl,    dt   ],
-            [iw-sr,   0,       sr,          st,          W-dr, 0,    dr,    dt   ],
-            [0,       ih-sb,   sl,          sb,          0,    H-db, dl,    db   ],
-            [iw-sr,   ih-sb,   sr,          sb,          W-dr, H-db, dr,    db   ],
-            [sl,      0,       iw-sl-sr,    st,          dl,   0,    W-dl-dr, dt   ],
-            [sl,      ih-sb,   iw-sl-sr,    sb,          dl,   H-db, W-dl-dr, db   ],
-            [0,       st,      sl,          ih-st-sb,    0,    dt,   dl,    H-dt-db],
-            [iw-sr,   st,      sr,          ih-st-sb,    W-dr, dt,   dr,    H-dt-db],
-            [sl,      st,      iw-sl-sr,    ih-st-sb,    dl,   dt,   W-dl-dr, H-dt-db],
+            // [srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH]
+            // 모서리 4개 (고정)
+            [0,       0,       sl,          st,          0,    0,    dl,    dt   ], // 좌상
+            [iw-sr,   0,       sr,          st,          W-dr, 0,    dr,    dt   ], // 우상
+            [0,       ih-sb,   sl,          sb,          0,    H-db, dl,    db   ], // 좌하
+            [iw-sr,   ih-sb,   sr,          sb,          W-dr, H-db, dr,    db   ], // 우하
+            // 변 4개 (늘어남)
+            [sl,      0,       iw-sl-sr,    st,          dl,   0,    W-dl-dr, dt   ], // 상
+            [sl,      ih-sb,   iw-sl-sr,    sb,          dl,   H-db, W-dl-dr, db   ], // 하
+            [0,       st,      sl,          ih-st-sb,    0,    dt,   dl,    H-dt-db], // 좌
+            [iw-sr,   st,      sr,          ih-st-sb,    W-dr, dt,   dr,    H-dt-db], // 우
+            // 중앙 (늘어남)
+            [sl,      st,      iw-sl-sr,    ih-st-sb,    dl,   dt,   W-dl-dr, H-dt-db], // 중
           ];
           pieces.forEach(([sx,sy,sw,sh,dx,dy,dw,dh]) => {
             if (sw>0 && sh>0 && dw>0 && dh>0)
@@ -1071,6 +1074,7 @@ function render() {
         img.src = imgData.url;
       };
 
+      // 크기 변화 감지해서 재그리기
       if (wrap._sliceObs) wrap._sliceObs.disconnect();
       const obs = new ResizeObserver(() => drawBubble());
       obs.observe(wrap);
@@ -1078,6 +1082,7 @@ function render() {
       setTimeout(drawBubble, 0);
 
     } else {
+      // canvas 제거
       if (wrap._sliceCanvas) { wrap._sliceCanvas.remove(); wrap._sliceCanvas = null; }
       if (wrap._sliceObs)    { wrap._sliceObs.disconnect(); wrap._sliceObs = null; }
       if (imgData && imgData.url) {
@@ -1095,6 +1100,7 @@ function render() {
       }
     }
   });
+
 
   setStyle('pv-inbar','background', inbar);
   setStyle('pv-inbox','color', g('c-intxt') || '#191919');
