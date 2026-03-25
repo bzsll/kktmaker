@@ -1047,7 +1047,7 @@ function render() {
         img.onload = () => {
           const iw = img.naturalWidth, ih = img.naturalHeight;
           const sl = iv.bgL, sr = iv.bgR, st = iv.bgT, sb = iv.bgB;
-          const dl = bgL, dr = bgR, dt = bgT, db = bgB;
+          const dl = sl, dr = sr, dt = st, db = sb;
 
           const pieces = [
             [0,       0,       sl,          st,          0,    0,    dl,    dt   ],
